@@ -4,53 +4,71 @@ With DOMML, you can write DOM as JSON in JavaScript files instead of writing HTM
 
 # Examples
 
-## Example #1
-- simple div data.
+## Example #1 defining a simple div data.
+
 - tag => html tag name
 - id => id
 - class => class
 - style => style
 
-- a DOMML data:
-    {
+a DOMML data:
+
+`    {
         'tag': 'div',
          'id': 'divid',
       'class': 'divclass',
       'style': { 'border': 'solid 1px black' }
-    }
-- is equivalent to this html:
-    <div id='divid' class='divclass' style='border: solid 1px black'></div>
+    }`
 
-## Example #2
+is equivalent to this html:
+
+`    <div id='divid' class='divclass' style='border: solid 1px black'></div>`
+
+## Example #2 defining a content data.
+
 - content => a content of the tag
-- this DOMML data
-    {
-           'tag': 'div',
-      'content': 'a div content'
-    }
-- is equivalent to this html.
-    <div>a div content</div>
 
-## Example #3
-- contains => defines DOM child nodes.
-- this DOMML data
-    {
+this DOMML data
+
+`    {
+           'tag': 'div',
+       'content': 'a div content'
+    }`
+
+is equivalent to this html.
+
+`    <div>a div content</div>`
+
+## Example #3 defining nested tags.
+
+- contains => child nodes.
+
+this DOMML data
+
+`    {
             'tag': 'ul',
        'contains': [
           { 'tag': 'li', 'content': 'item 1' },
           { 'tag': 'li', 'content': 'item 2' }]
-    }
-- is equivalent to this html.
-    <ul><li>item one</li><li>item two</li></ul>
+    }`
 
-## Example #4
-- when 'tag' entry is omitted, it is handled as div tag.
-- this DOMML data
-    {
+is equivalent to this html.
+
+`    <ul><li>item one</li><li>item two</li></ul>`
+
+## Example #4 div is the default tag.
+
+when the 'tag' entry is omitted, it is handled as div tag.
+
+this DOMML data
+
+`    {
       'content': 'some text'
-    }
-- is equivalent to this html.
-    <div>some text</div>
+    }`
+
+is equivalent to this html.
+
+`    <div>some text</div>`
 
 ## Example #5 Event Handlers
 - TBD
