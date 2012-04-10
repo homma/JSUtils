@@ -80,20 +80,20 @@ is equivalent to this html.
 
 ## Backbone.View
 - http://backbonejs.org/
-- has functionarity of creating DOM element from JSON data
-- has an easy to use event handler binding
-- lacks a functionarity of creating nested view in declarative manner
+- has a functionarity of creating DOM elements from JavaScript objects
+- has an easy to use event handler binding facility
+- lacks a functionarity of creating nested views in a declarative manner
 
 ## enyo.js Component
 - http://enyojs.com/
-- has functionarity of creating DOM element from JSON data
-- has an easy to use event handler binding
-- making nested view in declarative manner is easy.
+- has a functionarity of creating DOM elements from JavaScript objects
+- has an easy to use event handler binding facility
+- making nested views in a declarative manner is easy.
 
 ## microjungle.js
 - https://github.com/deepsweet/microjungle
-- has functionarity of creating DOM element from JSON data
-- you can define HTML tags as JavaScript Array.
+- has a functionarity of creating DOM elements from JSON data
+- heavily utilizes the JavaScript Array literal format
 
 ## JSONML Object Format
 - http://jsonml.org/
