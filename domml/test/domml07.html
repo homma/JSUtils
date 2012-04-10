@@ -1,0 +1,25 @@
+<html>
+<body>
+  <script type="text/javascript" src="../domml.js"></script>
+  <script>
+
+  var view = {
+    'tag' : 'div',
+    'class' : 'cl',
+    'id' : 'iden',
+    'name' : 'nm',
+    'style' : {
+       'border': 'solid 1px black', 'width': '200px', 'height': '120px'
+    },
+    'contains' : [
+       { 'content' : 'some text', 'style' : { 'color' : 'blue' } },
+       { 'content' : 'another text', 'style' : { 'color' : 'black' } }
+    ]
+  }
+
+  var elem = DOMML.create(view);
+  document.body.appendChild(elem);
+
+  </script>
+</body>
+</html>

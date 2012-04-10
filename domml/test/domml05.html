@@ -1,0 +1,17 @@
+<html>
+<body>
+  <script type="text/javascript" src="../domml.js"></script>
+  <script>
+  var view = {
+          'tag': 'ul',
+     'contains': [
+        { 'tag': 'li', 'content': 'item 1' },
+        { 'tag': 'li', 'content': 'item 2' }]
+  }
+
+  var elem = DOMML.create(view);
+  document.body.appendChild(elem);
+
+  </script>
+</body>
+</html>
