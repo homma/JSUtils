@@ -1,11 +1,10 @@
 
-# What is DOMML.js?
-DOMML.js is an notation of DOM data in JavaScript syntax.
-You can write DOM data as JavaScript objects instead of HTML.
+# What is DOMML?
+With DOMML, you can write DOM as JSON in JavaScript files instead of writing HTML tags.
 
 # Examples
 
-## #1
+## Example #1
 - simple div data.
 - tag => html tag name
 - id => id
@@ -22,7 +21,7 @@ You can write DOM data as JavaScript objects instead of HTML.
 - is equivalent to this html:
     <div id='divid' class='divclass' style='border: solid 1px black'></div>
 
-## #2
+## Example #2
 - content => a content of the tag
 - this DOMML data
     {
@@ -32,7 +31,7 @@ You can write DOM data as JavaScript objects instead of HTML.
 - is equivalent to this html.
     <div>a div content</div>
 
-## #3
+## Example #3
 - contains => defines DOM child nodes.
 - this DOMML data
     {
@@ -44,7 +43,7 @@ You can write DOM data as JavaScript objects instead of HTML.
 - is equivalent to this html.
     <ul><li>item one</li><li>item two</li></ul>
 
-## #4
+## Example #4
 - when 'tag' entry is omitted, it is handled as div tag.
 - this DOMML data
     {
@@ -53,10 +52,10 @@ You can write DOM data as JavaScript objects instead of HTML.
 - is equivalent to this html.
     <div>some text</div>
 
-## #5 Event Handlers
+## Example #5 Event Handlers
 - TBD
 
-## #6 Templating
+## Example #6 Templating
 - TBD
 
 # Similar Projects
