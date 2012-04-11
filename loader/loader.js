@@ -3,14 +3,10 @@
 
 new function() { // block
 
-var self;
+window.Loader = this;
 
-if(typeof exports !== 'undefined') {
-  self = exports;
-} else {
-  self = window.Loader = {};
-}
-
+// capturing 'this' to 'self' for convenience.
+var self = this;
 
 self.loadInOrder = function(path) {
 

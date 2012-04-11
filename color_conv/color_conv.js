@@ -11,7 +11,7 @@ var self;
 if(typeof exports !== 'undefined') {
   self = exports;
 } else {
-  self = window.ColorConverter = {};
+  self = window.ColorConverter = this;
 }
 
 // Red, Green Blue => Hue, Saturation, Value

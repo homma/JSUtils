@@ -3,13 +3,10 @@
 
 new function() { // block
 
-var self;
+window.DOMML = this;
 
-if(typeof exports !== 'undefined') {
-  self = exports;
-} else {
-  self = window.DOMML = {};
-}
+// capturing 'this' to 'self' for convenience.
+var self = this;
 
 var defined = function(obj, param) {
 

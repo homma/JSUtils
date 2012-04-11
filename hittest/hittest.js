@@ -12,7 +12,7 @@ var self;
 if(typeof exports !== 'undefined') {
   self = exports;
 } else {
-  self = window.HitTest = {};
+  self = window.HitTest = this;
 }
 
 self.debug = false;
