@@ -1,5 +1,5 @@
 
-# What is these?
+# What are these?
 
 ## color_conv
 - a converter between RGB and HSV color space
