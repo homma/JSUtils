@@ -3,7 +3,7 @@
 With DOMML, you can write DOM as JSON in JavaScript files instead of writing HTML tags.  Since DOMML data are JavaScript codes, they can be written in multiple separated files, they are easily manipulatable from programs and they are much easier to read than HTML tags if you are a programmer.
 
 # Usage
-Use DOMML#create to convert DOMML datum to a DOM element.
+Use DOMML#create to convert a DOMML data to a DOM element.
 
 ```javascript
   var view = { 'tag': 'div', 'content': 'a div content' };

@@ -13,6 +13,9 @@
 ## loader
 - a JavaScript script file loader
 
+## relatively
+- determins relative direction (left, right, front, back)
+
 # License
 MIT License.
 
