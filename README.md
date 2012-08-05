@@ -10,6 +10,9 @@
 ## hittest
 - a hit tester
 
+## json2kv
+- a converter between JSON and key-value pairs
+
 ## loader
 - a JavaScript script file loader
 
