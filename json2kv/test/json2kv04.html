@@ -1,0 +1,17 @@
+<html>
+<body>
+  <script type="text/javascript" src="../json2kv.js"></script>
+  <script>
+
+  var json = '{ "parent" : { "child1" : "foo", "child2" : "bar" } }'
+  console.log(json);
+
+  var kv = JSON2KV.json2kv(json, "12345:");
+  console.log(kv);
+
+  var js = JSON2KV.kv2json(kv, "12345:");
+  console.log(js);
+
+  </script>
+</body>
+</html>

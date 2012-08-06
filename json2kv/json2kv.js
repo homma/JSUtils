@@ -236,7 +236,7 @@ self.kv2object = function(array, prefix, odelim, adelim) {
     var val = kv[key];
 
     if(prefix) {
-      key.splice(0, prefix.length);
+      key = key.substring(prefix.length);
     }
 
     var names = self.splitKey(key, odelim, adelim);
@@ -313,7 +313,19 @@ self.takeOneKey = function(string, delim0, delim1) {
 
   var ret = {};
 
-  if( (end0 == -1) || (end1 < end0) ) {
+  var delim;
+
+  if(end0 == -1) {
+    delim = delim1;
+  } else if(end1 == -1) {
+    delim = delim0;
+  } else if(end1 <= end0) {
+    delim = delim1;
+  } else if(end0 <= end1) {
+    delim = delim0;
+  }
+
+  if(delim == delim1) {
     ret.string = string.substring(0, end1);
     ret.rest = string.substring(end1 + len1);
     ret.delim = delim1;
@@ -321,7 +333,7 @@ self.takeOneKey = function(string, delim0, delim1) {
     return ret;
   }
 
-  if( (end1 == -1) || (end0 < end1) ) {
+  if(delim == delim0) {
     ret.string = string.substring(0, end0);
     ret.rest = string.substring(end0 + len0);
     ret.delim = delim0;
