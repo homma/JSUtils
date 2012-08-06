@@ -74,6 +74,14 @@ will be converted as:
 You can set a prefix to the keys.
 Here, "12345:" is added for each keys.
 
+Before:
+
+```javascript
+  { "parent" : { "child1" : "foo", "child2" : "bar" } }
+```
+
+After:
+
 ```javascript
   [ { "12345:parent" : "OBJECT" },
     { "12345:parent\:" : "child1\:child2" },
