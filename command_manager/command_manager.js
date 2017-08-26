@@ -1,8 +1,12 @@
+/*
+ * @author Daisuke Homma
+ */
+
 { // namespace boundary
 
 // change parent object as you like.
-// default is window.
-let lib = window;
+// default is jsutils or window.
+const lib = jsutils || window;
 
 //// CommandManager Interface
 // addCommand : add CommandObject and execute
@@ -99,12 +103,6 @@ lib.CommandManager.prototype.redo = function() {
   }
 
   cmdObject.do();
-
-}
-
-lib.CommandManager.prototype.test = function() {
-
-  // To be implemented.
 
 }
 

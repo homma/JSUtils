@@ -2,20 +2,19 @@
  * @author Daisuke Homma
  */
 
+{ // namespace boundary
+
+//// ColorConverter
 // HSV <==> RGB converter
 
-new function() { // block
+// change parent object as you like.
+// default is jsutils or window.
+const lib = jsutils || window;
 
-var self;
-
-if(typeof exports !== 'undefined') {
-  self = exports;
-} else {
-  self = window.ColorConverter = this;
-}
+lib.ColorConverter = {};
 
 // Red, Green Blue => Hue, Saturation, Value
-self.rgb2hsv = function(red, green, blue) {
+lib.ColorConverter.rgb2hsv = function(red, green, blue) {
 
   console.log("rgb2hsv");
   console.log("input: " + red + ", " + green + ", " + blue);
@@ -74,7 +73,7 @@ self.rgb2hsv = function(red, green, blue) {
 }
 
 // Hue, Saturation, Value => Red, Green, Blue
-self.hsv2rgb = function(h, s, v) {
+lib.ColorConverter.hsv2rgb = function(h, s, v) {
 
   console.log("hsv2rgb");
   console.log("input: " + h + ", " + s + ", " + v);
@@ -137,49 +136,48 @@ self.hsv2rgb = function(h, s, v) {
   return { r: r, g: g, b: b };
 }
 
-self.testColorConversion = function() {
+lib.ColorConverter.test = function() {
+
+  let cc = lib.ColorConverter;
 
   // RGB test
-  var rgb = self.hsv2rgb(0, 0, 1);
+  var rgb = cc.hsv2rgb(0, 0, 1);
   console.log("r: " + rgb.r + " g: " + rgb.g + " b: " + rgb.b);
 
-  var rgb = self.hsv2rgb(0, 1, 1);
+  var rgb = cc.hsv2rgb(0, 1, 1);
   console.log("r: " + rgb.r + " g: " + rgb.g + " b: " + rgb.b);
 
-  var rgb = self.hsv2rgb(60, 1, 1);
+  var rgb = cc.hsv2rgb(60, 1, 1);
   console.log("r: " + rgb.r + " g: " + rgb.g + " b: " + rgb.b);
 
-  var rgb = self.hsv2rgb(120, 1, 1);
+  var rgb = cc.hsv2rgb(120, 1, 1);
   console.log("r: " + rgb.r + " g: " + rgb.g + " b: " + rgb.b);
 
-  var rgb = self.hsv2rgb(180, 1, 1);
+  var rgb = cc.hsv2rgb(180, 1, 1);
   console.log("r: " + rgb.r + " g: " + rgb.g + " b: " + rgb.b);
 
-  var rgb = self.hsv2rgb(240, 1, 1);
+  var rgb = cc.hsv2rgb(240, 1, 1);
   console.log("r: " + rgb.r + " g: " + rgb.g + " b: " + rgb.b);
 
-  var rgb = self.hsv2rgb(300, 1, 1);
+  var rgb = cc.hsv2rgb(300, 1, 1);
   console.log("r: " + rgb.r + " g: " + rgb.g + " b: " + rgb.b);
 
-  var rgb = self.hsv2rgb(360, 1, 1);
+  var rgb = cc.hsv2rgb(360, 1, 1);
   console.log("r: " + rgb.r + " g: " + rgb.g + " b: " + rgb.b);
 
   // HSV test
-  var hsv = self.rgb2hsv(0xFF, 0x00, 0x00);
+  var hsv = cc.rgb2hsv(0xFF, 0x00, 0x00);
   console.log("h: " + hsv.h + " s: " + hsv.s + " v: " + hsv.v);
 
-  var hsv = self.rgb2hsv(0xFF, 0xFF, 0x00);
+  var hsv = cc.rgb2hsv(0xFF, 0xFF, 0x00);
   console.log("h: " + hsv.h + " s: " + hsv.s + " v: " + hsv.v);
 
-  var hsv = self.rgb2hsv(0xFF, 0x00, 0xFF);
+  var hsv = cc.rgb2hsv(0xFF, 0x00, 0xFF);
   console.log("h: " + hsv.h + " s: " + hsv.s + " v: " + hsv.v);
 
-  var hsv = self.rgb2hsv(0x33, 0x00, 0x00);
+  var hsv = cc.rgb2hsv(0x33, 0x00, 0x00);
   console.log("h: " + hsv.h + " s: " + hsv.s + " v: " + hsv.v);
 
 }
 
-} // block
-
-ColorConverter.testColorConversion();
-
+} // namespace boundary

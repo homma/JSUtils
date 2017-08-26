@@ -1,8 +1,11 @@
 
 # What are these?
 
-## color_conv
+## color_conveter
 - a converter between RGB and HSV color space
+
+## command_manager
+- an Undo Manager
 
 ## domml
 - a DOM generator from JSON data
@@ -20,5 +23,6 @@
 - determins relative direction (left, right, front, back)
 
 # License
+
 MIT License.
 
