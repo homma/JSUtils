@@ -16,8 +16,8 @@ const lib = jsutils || window;
 //// CommandObject Layout
 // cmd = {
 //   transactionBoundary: Boolean,
-//   do: Function,
-//   undo: Function,
+//   do: Function, // () => { ... }
+//   undo: Function,  // () => { ... }
 // }
 
 lib.CommandManager = function {
@@ -35,20 +35,12 @@ lib.CommandManager.prototype.addCommand = function(cmdObject) {
   this.redoQueue = [];
 
   // execute command
-  this.do(cmdObject);
+  if(! cmdObject.transactionBoundary) {
+    cmdObject.do();
+  }
 
   // add command to the undo queue
   this.undoQueue.push(cmdObject);
-
-}
-
-lib.CommandManager.prototype.do = function(cmdObject) {
-
-  if(cmdObject.transactionBoundary) {
-    return;
-  }
-
-  cmdObject.do();
 
 }
 
@@ -94,7 +86,7 @@ lib.CommandManager.prototype.redo = function() {
     this.undoQueue.push(cmdObject);
 
     while(! cmdObject.transactionBoundary) {
-      cmdObject.redo();
+      cmdObject.do();
 
       cmdObject = this.redoQueue.pop();
       this.undoQueue.push(cmdObject);
