@@ -16,8 +16,9 @@ const lib = jsutils || window;
 //// CommandObject Layout
 // cmd = {
 //   transactionBoundary: Boolean,
-//   do: Function, // () => { ... }
-//   undo: Function,  // () => { ... }
+//   do: Function,         // () => { fun(arg) }
+//   undo: Function,       // () => { fun(arg) }
+//   description: String,  // command_name, arg
 // }
 
 lib.CommandManager = function {
