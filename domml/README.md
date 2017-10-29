@@ -6,10 +6,10 @@ With DOMML, you can write DOM as JSON in JavaScript files instead of writing HTM
 Use DOMML#create to convert a DOMML data to a DOM element.
 
 ```javascript
-  var view = { 'tag': 'div', 'content': 'a div content' };
+  const view = { 'tag': 'div', 'content': 'a div content' };
 
-  var elem = DOMML.create(view);
-  document.body.appendChild(elem);
+  const elem = DOMML.create(view);
+  DOMML.append(document.body, elem);
 ```
 
 # Examples
@@ -103,6 +103,10 @@ is equivalent to this html.
 - TBD
 
 # Similar Projects
+
+## HyperScript
+- https://github.com/hyperhype/hyperscript
+- [Demo](http://hyperhype.github.io/hyperscript/)
 
 ## Backbone.View
 - http://backbonejs.org/

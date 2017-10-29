@@ -1,40 +1,31 @@
+/*
+ * @author Daisuke Homma
+ */
 
-// @author: Daisuke Homma
-
-new function() { // block
+{ // namespace boundary
 
 window.DOMML = this;
 
 // capturing 'this' to 'self' for convenience.
-var self = this;
+const self = this;
 
-var defined = function(obj, param) {
+self.append = function(root, elem) {
 
-  if(typeof obj[param] === 'undefined') {
-    return false;
-  }
-
-  return true;
+  root.appendChild(elem);
 
 }
-
-var match = function(val, arr) {
-
-  return arr.some(function(v) {
-    return (v == val);
-  });
-
-}
-
-var special = [ 'tag', 'class', 'content', 'style', 'contains' ];
 
 self.create = function(obj) {
 
-  var elem = self.tag(obj);
+  // create element with the specified tag
+  const elem = self.tag(obj);
 
+  // copy properties other than DOMML related properties
+  const domml_prop = [ 'tag', 'class', 'content', 'style', 'contains' ];
   for(i in obj) {
 
-    if( match(obj, special) ) { continue };
+    // skip DOMML specific properties
+    if( domml_prop.includes(i) ) { continue };
 
     elem[i] = obj[i];
 
@@ -46,6 +37,18 @@ self.create = function(obj) {
   self.contains(obj, elem);
 
   return elem;
+
+}
+
+// utility function
+// check if the specified property is defined in the object
+const defined = function(obj, param) {
+
+  if(typeof obj[param] === 'undefined') {
+    return false;
+  }
+
+  return true;
 
 }
 
@@ -91,11 +94,11 @@ self.contains = function(obj, elem) {
 
   if( !defined(obj, 'contains') ) { return };
 
-  var fragment = document.createDocumentFragment();
+  const fragment = document.createDocumentFragment();
 
   obj.contains.forEach( function(v, i) {
 
-    var el = self.create(obj.contains[i]);
+    const el = self.create(obj.contains[i]);
     fragment.appendChild(el);
 
   });
@@ -104,5 +107,4 @@ self.contains = function(obj, elem) {
 
 }
 
-} // block
-
+} // namespace boundary
