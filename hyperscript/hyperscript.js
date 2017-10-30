@@ -35,6 +35,9 @@ const handleArgs = (elem, args) => {
 
   const isNull = val => val == null;
   const isString = val => typeof val === "string";
+  const isNumber = val => typeof val === "number";
+  const isDate = val => val instanceof Date;
+  const isBoolean = val => typeof val === "boolean";
   const isHTMLElement = val => ( (val instanceof Node) ||
                                  (val instanceof HTMLElement) );
   const isObject = val => typeof val === "object";
@@ -59,6 +62,11 @@ const handleArgs = (elem, args) => {
 
       elem.innerText = val;
 
+    } else if( isNumber(val) || isDate(val) || isBoolean(val) ) {
+               // children - other data
+
+      elem.innerText = val.toString();
+
     } else if(isHTMLElement(val)) { // children - HTMLElement
 
       elem.appendChild(val);
@@ -78,6 +86,10 @@ const handleArgs = (elem, args) => {
         }
 
       }
+    } else {
+
+      console.log("unknown value found: ", val);
+
     }
   }
 
