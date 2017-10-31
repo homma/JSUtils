@@ -4,9 +4,9 @@
 
 { // namespace boundary
 
-var jsutils = jsutils || window;
+const lib = jsutils || window
 
-jsutils.hyperscript = function(tag, ...args) {
+lib.hyperscript = function(tag, ...args) {
 
   const elem = handleTag(tag);
   handleArgs(elem, args);
@@ -15,7 +15,21 @@ jsutils.hyperscript = function(tag, ...args) {
 
 }
 
+// utility functions
+const isNull = val => val == null;
+const isString = val => typeof val === "string";
+const isNumber = val => typeof val === "number";
+const isDate = val => val instanceof Date;
+const isBoolean = val => typeof val === "boolean";
+const isHTMLElement = val => ( (val instanceof Node) ||
+                               (val instanceof HTMLElement) );
+const isObject = val => typeof val === "object";
+const toCamel = str => str.replace(/-([a-z])/g,
+                                   (match, p1) => p1.toUpperCase());
+
 const handleTag = tag => {
+
+  if(!isString(tag)) { console.error("tag should be a string") }
 
   const [t1, id] = tag.split("#");
   const [t2, ...cls] = t1.split(".");
@@ -32,17 +46,6 @@ const handleTag = tag => {
 }
 
 const handleArgs = (elem, args) => {
-
-  const isNull = val => val == null;
-  const isString = val => typeof val === "string";
-  const isNumber = val => typeof val === "number";
-  const isDate = val => val instanceof Date;
-  const isBoolean = val => typeof val === "boolean";
-  const isHTMLElement = val => ( (val instanceof Node) ||
-                                 (val instanceof HTMLElement) );
-  const isObject = val => typeof val === "object";
-  const toCamel = str => str.replace(/-([a-z])/g,
-                                     (match, p1) => p1.toUpperCase());
 
   const handleStyle = style => {
     for(var prop in style) {
