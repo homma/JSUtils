@@ -1,45 +1,43 @@
 
-// @author: Daisuke Homma
+// @author Daisuke Homma
 
-new function() { // block
+{ // namespace boundary
 
-window.Loader = this;
+const loader = {};
+window.loader = loader; 
 
-// capturing 'this' to 'self' for convenience.
-var self = this;
+loader.loadInOrder = function(path) {
 
-self.loadInOrder = function(path) {
-
-  self.loadInternal(path, false, false);
+  loader.loadInternal(path, false, false);
 
 }
 
-self.loadAsync = function(path) {
+loader.loadAsync = function(path) {
 
-  self.loadInternal(path, true, false);
-
-}
-
-self.loadDefer = function(path) {
-
-  self.loadInternal(path, false, true);
+  loader.loadInternal(path, true, false);
 
 }
 
-self.load = self.loadAsync;
+loader.loadDefer = function(path) {
 
-self.loadInternal = function(path, async, defer) {
+  loader.loadInternal(path, false, true);
 
-  var el = document.createElement('script');
+}
+
+loader.load = loader.loadAsync;
+
+loader.loadInternal = function(path, asyn, defer) {
+
+  const el = document.createElement('script');
 
   el.type = "text/javascript";
-  el.async = async;
-  el.defer = defer;
   el.src = path;
+  el.async = asyn;
+  el.defer = defer;
 
-  document.getElementsByTagName("head")[0].appendChild(el);
+  document.head.appendChild(el);
 
 }
 
-} // block
+} // namespace boundary
 

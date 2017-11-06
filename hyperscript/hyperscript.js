@@ -4,7 +4,7 @@
 
 { // namespace boundary
 
-const lib = jsutils || window
+const lib = window;
 
 lib.hyperscript = function(tag, ...args) {
 
