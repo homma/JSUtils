@@ -4,7 +4,7 @@
 
 { // namespace boundary
 
-const jsutils = jsutils || window;
+let jsutils = jsutils || window;
 const lib = jsutils;
 
 //// repeat
@@ -47,5 +47,8 @@ lib.isHTMLElement = val => ( (val instanceof Node) ||
 // convert foo-bar-baz to fooBarBaz
 lib.toCamel = str => str.replace(/-([a-z])/g,
                                    (match, p1) => p1.toUpperCase());
+
+//// String
+lib.explode = str => Object.values(str);
 
 } // namespace boundary
