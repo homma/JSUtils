@@ -50,5 +50,6 @@ lib.toCamel = str => str.replace(/-([a-z])/g,
 
 //// String
 lib.explode = str => Object.values(str);
+lib.implode = arr => arr.join('');
 
 } // namespace boundary
