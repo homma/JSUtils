@@ -49,12 +49,16 @@ lib.toCamel = str => str.replace(/-([a-z])/g,
                                    (match, p1) => p1.toUpperCase());
 
 //// String
-lib.explode = str => Object.values(str);
-lib.implode = arr => arr.join('');
 
+lib.explode = str => str.split('');
+
+// Alt: lib.explode = str => Object.values(str);
+
+lib.implode = arr => arr.join(''); 
 // Apply Array.map to String
-// same as below
-// (str, fun) => Object.values(str).map(fun);
-lib.stringMap = (str, fun) => Array.prototype.map.call(str, fun);
+lib.stringMap = (str, fun) => str.split('').map(fun);
+
+// Alt: (str, fun) => Object.values(str).map(fun);
+// Alt: (str, fun) => Array.prototype.map.call(str, fun);
 
 } // namespace boundary
