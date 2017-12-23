@@ -53,6 +53,8 @@ lib.explode = str => Object.values(str);
 lib.implode = arr => arr.join('');
 
 // Apply Array.map to String
-lib.stringMap = (str, fun) => map.call(str, fun);
+// same as below
+// (str, fun) => Object.values(str).map(fun);
+lib.stringMap = (str, fun) => Array.prototype.map.call(str, fun);
 
 } // namespace boundary
