@@ -52,4 +52,7 @@ lib.toCamel = str => str.replace(/-([a-z])/g,
 lib.explode = str => Object.values(str);
 lib.implode = arr => arr.join('');
 
+// Apply Array.map to String
+lib.stringMap = (str, fun) => map.call(str, fun);
+
 } // namespace boundary
