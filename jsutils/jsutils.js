@@ -50,15 +50,17 @@ lib.toCamel = str => str.replace(/-([a-z])/g,
 
 //// String
 
-lib.explode = str => str.split('');
+lib.explode = str => Array.from(str);
 
-// Alt: lib.explode = str => Object.values(str);
+// Alt: str => Object.values(str);
+// Alt: str => str.split('');
 
 lib.implode = arr => arr.join(''); 
 // Apply Array.map to String
-lib.stringMap = (str, fun) => str.split('').map(fun);
+lib.stringMap = (str, fun) => Array.from(str).map(fun);
 
 // Alt: (str, fun) => Object.values(str).map(fun);
 // Alt: (str, fun) => Array.prototype.map.call(str, fun);
+// Alt: (str, fun) => str.split('').map(fun);
 
 } // namespace boundary
