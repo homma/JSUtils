@@ -6,8 +6,8 @@
 
 const chunkTypes = {
 
-  0x0004: "old_palette1",
-  0x0011: "old_palette2",
+  0x0004: "old_palette_1",
+  0x0011: "old_palette_2",
   0x2004: "layer",
   0x2005: "cel",
   0x2006: "cel_extra",
@@ -46,9 +46,42 @@ AseChunk.prototype.dump = function() {
 
   console.log("### Chunk ###");
 
-  const keys = Object.keys(this.chunk);
+  switch(this.chunk.type) {
 
+    case "palette":
+      this.dumpPalette();
+      break;
+
+    default:
+      this.dumpGeneric();
+
+  }
+
+}
+
+AseChunk.prototype.dumpGeneric = function() {
+
+  const keys = Object.keys(this.chunk).filter(v => v != "data");
   keys.forEach(v => console.log(`${v} : ${this.chunk[v]}`) )
+
+  const toHex = data => {
+
+    return (0 + data.toString(16).toUpperCase()).slice(-2);
+
+  }
+
+  let data = this.chunk.data.reduce((acc, v) => `${acc} ${toHex(v)}`, "");
+  console.log(`data :${data}`);
+
+}
+
+AseChunk.prototype.dumpPalette = function() {
+
+  const keys = Object.keys(this.chunk).filter(v => v != "data");
+  keys.forEach(v => console.log(`${v} : ${this.chunk[v]}`) )
+
+  const palette = new myapp.AsePalette(this);
+  palette.dump();
 
 }
 
@@ -70,7 +103,7 @@ AseChunk.prototype.readType = function() {
 
 AseChunk.prototype.readData = function() {
 
-  return this.buf.slice(6, this.buf.length).toString();
+  return this.buf.slice(6, this.buf.length).buf;
 
 }
 

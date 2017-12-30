@@ -1,6 +1,8 @@
 src/config.js
 src/debug.js
 src/ase_buffer.js
+src/ase_palette_color.js
+src/ase_palette.js
 src/ase_chunk.js
 src/ase_frame.js
 src/ase_frames.js

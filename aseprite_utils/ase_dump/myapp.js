@@ -148,6 +148,7 @@ AseBuffer.prototype.readString = function(start) {
 
   const len = this.readWord(start);
   const str = this.readByteArray(start + 2, len).toString('utf8');
+  const size = len + 2;
 
   return { length: len, string: str };
 
@@ -189,10 +190,156 @@ AseBuffer.prototype.readIndexed = function(start) {
 
 { // namespace boundary
 
+const AsePaletteColor = function(palette, start) {
+
+  this.palette = palette;
+  this.buf = palette.buf;
+
+  this.color = {};
+  this.color.size = 5;
+  this.color.has_name = this.readHasName(start + 0);
+  this.color.red = this.buf.readByte(start + 2);
+  this.color.green = this.buf.readByte(start + 3);
+  this.color.blue = this.buf.readByte(start + 4);
+  this.color.alpha = this.buf.readByte(start + 5);
+
+  if(this.color.has_name == 1) {
+
+    myapp.debug(this.color.has_name);
+
+    let str = this.buf.readString(start + 6);
+
+    myapp.debug(str);
+
+    this.color.name = str.string;
+    this.color.size += str.size;
+
+  }
+
+  myapp.nebug(this.color.size);
+
+}
+
+myapp.AsePaletteColor = AsePaletteColor;
+
+AsePaletteColor.prototype.dump = function() {
+
+  myapp.nebug("AsePaletteColor dump.");
+
+  // console.log("##### Palette Color #####");
+
+  const toHex = color => {
+
+    return (0 + color.toString(16).toUpperCase()).slice(-2);
+
+  }
+
+  const r = toHex(this.color.red);
+  const g = toHex(this.color.green);
+  const b = toHex(this.color.blue);
+
+  console.log(`# ${r} ${g} ${b}`);
+
+}
+
+AsePaletteColor.prototype.readHasName = function(start) {
+
+  return this.buf.readWord(start);
+
+}
+
+} // namespace boundary
+/*
+ * @author Daisuke Homma
+ */
+
+{ // namespace boundary
+
+const AsePalette = function(chunk) {
+
+  this.chunk = chunk;
+
+  const start = 6;
+  this.buf = chunk.buf.slice(start, chunk.buf.length);
+
+  this.palette = {};
+
+  this.palette.size = this.readSize();
+  this.palette.first_color_index = this.readFirstColorIndex();
+  this.palette.last_color_index = this.readLastColorIndex();
+  this.palette.colors = this.readColors();
+
+}
+
+myapp.AsePalette = AsePalette;
+
+AsePalette.prototype.dump = function() {
+
+  myapp.nebug("AsePalette dump.");
+
+  console.log("#### Palette ####");
+
+  const keys = Object.keys(this.palette).filter(v => v != "colors");
+  keys.forEach(v => console.log(`${v} : ${this.palette[v]}`) )
+
+  console.log("#### Palette Colors ####");
+
+  this.palette.colors.forEach(v => v.dump());
+
+}
+
+AsePalette.prototype.readSize = function() {
+
+  return this.buf.readDWord(0);
+
+}
+
+AsePalette.prototype.readFirstColorIndex = function() {
+
+  return this.buf.readDWord(4);
+
+}
+
+AsePalette.prototype.readLastColorIndex = function() {
+
+  return this.buf.readDWord(8);
+
+}
+
+AsePalette.prototype.readColors = function() {
+
+  let start = 16;
+  const n = this.palette.size;
+
+  const colors = [];
+
+  for(let i = 0; i < n; i++) {
+
+    let c = new myapp.AsePaletteColor(this, start);
+
+    myapp.nebug(c);
+
+    start += c.color.size;
+
+    colors.push(c);
+
+  }
+
+  return colors;
+
+}
+
+} // namespace boundary
+/*
+ * @author Daisuke Homma
+ */
+
+{ // namespace boundary
+
 const chunkTypes = {
 
-  0x0004: "old_palette1",
-  0x0011: "old_palette2",
+  0x0004: "old_palette_1",
+  0x0011: "old_palette_2",
   0x2004: "layer",
   0x2005: "cel",
   0x2006: "cel_extra",
@@ -231,9 +378,42 @@ AseChunk.prototype.dump = function() {
 
   console.log("### Chunk ###");
 
-  const keys = Object.keys(this.chunk);
+  switch(this.chunk.type) {
 
+    case "palette":
+      this.dumpPalette();
+      break;
+
+    default:
+      this.dumpGeneric();
+
+  }
+
+}
+
+AseChunk.prototype.dumpGeneric = function() {
+
+  const keys = Object.keys(this.chunk).filter(v => v != "data");
   keys.forEach(v => console.log(`${v} : ${this.chunk[v]}`) )
+
+  const toHex = data => {
+
+    return (0 + data.toString(16).toUpperCase()).slice(-2);
+
+  }
+
+  let data = this.chunk.data.reduce((acc, v) => `${acc} ${toHex(v)}`, "");
+  console.log(`data :${data}`);
+
+}
+
+AseChunk.prototype.dumpPalette = function() {
+
+  const keys = Object.keys(this.chunk).filter(v => v != "data");
+  keys.forEach(v => console.log(`${v} : ${this.chunk[v]}`) )
+
+  const palette = new myapp.AsePalette(this);
+  palette.dump();
 
 }
 
@@ -255,7 +435,7 @@ AseChunk.prototype.readType = function() {
 
 AseChunk.prototype.readData = function() {
 
-  return this.buf.slice(6, this.buf.length).toString();
+  return this.buf.slice(6, this.buf.length).buf;
 
 }
 
