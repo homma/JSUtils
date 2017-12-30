@@ -196,7 +196,7 @@ const AsePaletteColor = function(palette, start) {
   this.buf = palette.buf;
 
   this.color = {};
-  this.color.size = 5;
+  this.color.size = 6;
   this.color.has_name = this.readHasName(start + 0);
   this.color.red = this.buf.readByte(start + 2);
   this.color.green = this.buf.readByte(start + 3);
@@ -237,8 +237,9 @@ AsePaletteColor.prototype.dump = function() {
   const r = toHex(this.color.red);
   const g = toHex(this.color.green);
   const b = toHex(this.color.blue);
+  const a = toHex(this.color.alpha);
 
-  console.log(`# ${r} ${g} ${b}`);
+  console.log(`# ${r} ${g} ${b} ${a}`);
 
 }
 
@@ -284,6 +285,7 @@ AsePalette.prototype.dump = function() {
 
   console.log("#### Palette Colors ####");
 
+  console.log("# R  G  B  A");
   this.palette.colors.forEach(v => v.dump());
 
 }
@@ -308,7 +310,7 @@ AsePalette.prototype.readLastColorIndex = function() {
 
 AsePalette.prototype.readColors = function() {
 
-  let start = 16;
+  let start = 20;
   const n = this.palette.size;
 
   const colors = [];

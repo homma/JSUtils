@@ -10,7 +10,7 @@ const AsePaletteColor = function(palette, start) {
   this.buf = palette.buf;
 
   this.color = {};
-  this.color.size = 5;
+  this.color.size = 6;
   this.color.has_name = this.readHasName(start + 0);
   this.color.red = this.buf.readByte(start + 2);
   this.color.green = this.buf.readByte(start + 3);
@@ -51,8 +51,9 @@ AsePaletteColor.prototype.dump = function() {
   const r = toHex(this.color.red);
   const g = toHex(this.color.green);
   const b = toHex(this.color.blue);
+  const a = toHex(this.color.alpha);
 
-  console.log(`# ${r} ${g} ${b}`);
+  console.log(`# ${r} ${g} ${b} ${a}`);
 
 }
 

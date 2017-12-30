@@ -33,6 +33,7 @@ AsePalette.prototype.dump = function() {
 
   console.log("#### Palette Colors ####");
 
+  console.log("# R  G  B  A");
   this.palette.colors.forEach(v => v.dump());
 
 }
@@ -57,7 +58,7 @@ AsePalette.prototype.readLastColorIndex = function() {
 
 AsePalette.prototype.readColors = function() {
 
-  let start = 16;
+  let start = 20;
   const n = this.palette.size;
 
   const colors = [];
