@@ -118,7 +118,7 @@ AseBuffer.prototype.readString = function(start) {
   const str = this.readByteArray(start + 2, len).toString('utf8');
   const size = len + 2;
 
-  return { length: len, string: str };
+  return { length: len, string: str, size: size };
 
 }
 
