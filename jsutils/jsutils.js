@@ -63,4 +63,11 @@ lib.stringMap = (str, fun) => Array.from(str).map(fun);
 // Alt: (str, fun) => Array.prototype.map.call(str, fun);
 // Alt: (str, fun) => str.split('').map(fun);
 
+//// sleep
+// sleep x seconds
+// needed to be used within an async function with await
+// usage: await sleep(3)
+
+lib.sleep = x => new Promise(rs => setTimeout(rs, x * 1000))
+
 } // namespace boundary
