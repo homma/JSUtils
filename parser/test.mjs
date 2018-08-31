@@ -1,4 +1,4 @@
-import libp from "./parser_combinator.mjs";
+import * as libp from "./parser_combinator.mjs";
 
 const test_string = (str1, str2) => {
   const input = new libp.StringReader(str2, 0);

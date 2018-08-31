@@ -6,6 +6,7 @@
 
 /*** String Reader ***/
 
+export //
 const StringReader = function(text, origin) {
   this.string = text;
   this.origin = origin;
@@ -49,6 +50,7 @@ ParseFailure.prototype.print = function() {
 
 /*** parsers ***/
 
+export //
 const string = str => input => {
   const len = str.length;
   const target = input.read(len);
@@ -63,9 +65,3 @@ const string = str => input => {
 };
 
 /*** combinators ***/
-
-/*** module export ***/
-
-const libp = { StringReader, string };
-
-export default libp;
