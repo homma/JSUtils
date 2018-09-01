@@ -156,3 +156,40 @@ const or = (...parsers) => input => {
 
   return new ParseFailure(expected, input);
 };
+
+/*
+ * REP PARSER
+ * parsing e*
+ */
+
+/*
+ * REP1 PARSER
+ * parsing e+ (= seq(e, rep(e)))
+ */
+
+/*
+ * OPT PARSER
+ * parsing e?
+ */
+
+/*
+ * ANDP PARSER
+ * parsing &e (=notp(notp(e)))
+ */
+
+/*
+ * NOTP PARSER
+ * parsing !e
+ */
+
+/*** utility functions ***/
+
+/*
+ * LAZY
+ *
+ */
+
+/*
+ * APPLY
+ *
+ */
