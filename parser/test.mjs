@@ -1,9 +1,13 @@
 import * as libp from "./parser_combinator.mjs";
 
+console.log("");
+
+/****** parser test ******/
+
 /*** string test ***/
 
 const test_string = (str1, str2) => {
-  const input = new libp.StringReader(str2, 0);
+  const input = new libp.StringReader(str2);
 
   const parser = libp.string(str1);
   const result = parser(input);
@@ -12,7 +16,6 @@ const test_string = (str1, str2) => {
 };
 
 const run_test_string = () => {
-  console.log("");
   console.log("# string test");
 
   test_string("foo", "foo");
@@ -36,7 +39,6 @@ const test_regexp = (pattern, str, origin) => {
 };
 
 const run_test_regexp = () => {
-  console.log("");
   console.log("# regexp test");
 
   test_regexp(/f../, "foo", 0);
@@ -62,7 +64,6 @@ const test_any1 = str => {
 };
 
 const run_test_any1 = () => {
-  console.log("");
   console.log("# any1 test");
 
   test_any1("abc");
@@ -72,3 +73,28 @@ const run_test_any1 = () => {
 };
 
 run_test_any1();
+
+/****** combinator test ******/
+
+/*** seq test ***/
+
+const test_seq = (str1, str2, str) => {
+  const input = new libp.StringReader(str);
+
+  const parser = libp.seq(libp.string(str1), libp.string(str2));
+  const result = parser(input);
+
+  result.print();
+};
+
+const run_test_seq = () => {
+  console.log("# seq test");
+
+  test_seq("a", "a", "aa");
+  test_seq("a", "a", "ab");
+  test_seq("abc", "def", "abcdef");
+
+  console.log("");
+};
+
+run_test_seq();

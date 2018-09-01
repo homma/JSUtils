@@ -7,7 +7,7 @@
 /*** String Reader ***/
 
 export //
-const StringReader = function(text, origin) {
+const StringReader = function(text, origin = 0) {
   this.string = text;
   this.origin = origin;
 };
@@ -109,3 +109,22 @@ const any1 = () => input => {
 };
 
 /*** combinators ***/
+
+export //
+const seq = (parser1, parser2) => input => {
+  const origin = input.origin;
+
+  const res1 = parser1(input);
+  if (!res1.success) {
+    input.set_origin(origin);
+    return res1;
+  }
+
+  const res2 = parser2(input);
+  if (!res2.success) {
+    input.set_origin(origin);
+    return new ParseFailure(res1.data + res2.expected, input);
+  }
+
+  return new ParseSuccess([res1.data, res2.data]);
+};
