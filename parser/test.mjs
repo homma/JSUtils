@@ -4,6 +4,9 @@ console.log("");
 
 /****** parser test ******/
 
+console.log("## parser test");
+console.log("");
+
 /*** string test ***/
 
 const test_string = (str1, str2) => {
@@ -75,6 +78,9 @@ const run_test_any1 = () => {
 run_test_any1();
 
 /****** combinator test ******/
+
+console.log("## combinator test");
+console.log("");
 
 /*** seq test ***/
 
