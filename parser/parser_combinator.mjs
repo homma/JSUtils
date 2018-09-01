@@ -16,6 +16,24 @@ StringReader.prototype.read = function(n) {
   return this.string.substr(this.origin, n);
 };
 
+StringReader.prototype.regexp_read = function(regexp) {
+  let re = regexp;
+
+  if (!re.sticky) {
+    re = new RegExp(re.source, re.flags + "y");
+  }
+
+  re.lastIndex = this.origin;
+
+  const res = re.exec(this.string);
+
+  if (res) {
+    return res[0];
+  }
+
+  return null;
+};
+
 StringReader.prototype.advance = function(n) {
   this.origin += n;
 };
@@ -62,6 +80,19 @@ const string = str => input => {
   }
 
   return new ParseFailure(str, input);
+};
+
+export //
+const regexp = pattern => input => {
+  const res = input.regexp_read(pattern);
+
+  if (res) {
+    input.advance(res.length);
+
+    return new ParseSuccess(res);
+  }
+
+  return new ParseFailure(pattern, input);
 };
 
 /*** combinators ***/
