@@ -71,9 +71,9 @@ ParseFailure.prototype.print = function() {
 export //
 const string = str => input => {
   const len = str.length;
-  const target = input.read(len);
+  const res = input.read(len);
 
-  if (target == str) {
+  if (res == str) {
     input.advance(len);
 
     return new ParseSuccess(str);
@@ -93,6 +93,19 @@ const regexp = pattern => input => {
   }
 
   return new ParseFailure(pattern, input);
+};
+
+export //
+const any1 = () => input => {
+  const res = input.read(1);
+
+  if (res.length == 1) {
+    input.advance(1);
+
+    return new ParseSuccess(res);
+  }
+
+  return new ParseFailure("any char", input);
 };
 
 /*** combinators ***/
