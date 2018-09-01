@@ -50,7 +50,7 @@ const ParseSuccess = function(data) {
 };
 
 ParseSuccess.prototype.print = function() {
-  console.log(`[Parse Succeeded] accepted: ${this.data}`);
+  console.log(`[Parse Succeeded] accepted: ${JSON.stringify(this.data)}`);
 };
 
 const ParseFailure = function(expected, reader) {
@@ -62,7 +62,9 @@ const ParseFailure = function(expected, reader) {
 ParseFailure.prototype.print = function() {
   const received = this.reader.string.substr(this.reader.origin, 20);
   console.log(
-    `[Parse Failed]    expected: ${this.expected} received: ${received}`
+    `[Parse Failed]    expected: ${JSON.stringify(
+      this.expected
+    )} received: ${received}`
   );
 };
 
@@ -110,21 +112,47 @@ const any1 = () => input => {
 
 /*** combinators ***/
 
+/*
+ * SEQ PARSER
+ * parsing e1 e2 e3 ...
+ */
 export //
-const seq = (parser1, parser2) => input => {
+const seq = (...parsers) => input => {
   const origin = input.origin;
+  const data = [];
 
-  const res1 = parser1(input);
-  if (!res1.success) {
-    input.set_origin(origin);
-    return res1;
+  for (let parser of parsers) {
+    const res = parser(input);
+
+    if (!res.success) {
+      input.set_origin(origin);
+      data.push(res.expected);
+
+      return new ParseFailure(data, input);
+    }
+
+    data.push(res.data);
   }
 
-  const res2 = parser2(input);
-  if (!res2.success) {
-    input.set_origin(origin);
-    return new ParseFailure(res1.data + res2.expected, input);
+  return new ParseSuccess(data);
+};
+
+/*
+ * OR PARSER
+ * parsing e1 / e2 / e3 / ...
+ */
+export //
+const or = (...parsers) => input => {
+  let expected = [];
+
+  for (let parser of parsers) {
+    const res = parser(input);
+    if (res.success) {
+      return res;
+    }
+
+    expected.push(res.expected);
   }
 
-  return new ParseSuccess([res1.data, res2.data]);
+  return new ParseFailure(expected, input);
 };

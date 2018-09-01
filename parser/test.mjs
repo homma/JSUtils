@@ -84,10 +84,11 @@ console.log("");
 
 /*** seq test ***/
 
-const test_seq = (str1, str2, str) => {
+const test_seq = (expected, str) => {
   const input = new libp.StringReader(str);
+  const parsers = expected.map(v => libp.string(v));
 
-  const parser = libp.seq(libp.string(str1), libp.string(str2));
+  const parser = libp.seq(...parsers);
   const result = parser(input);
 
   result.print();
@@ -96,11 +97,36 @@ const test_seq = (str1, str2, str) => {
 const run_test_seq = () => {
   console.log("# seq test");
 
-  test_seq("a", "a", "aa");
-  test_seq("a", "a", "ab");
-  test_seq("abc", "def", "abcdef");
+  test_seq(["a", "a"], "aa");
+  test_seq(["a", "a", "a"], "aaa");
+  test_seq(["a", "a"], "ab");
+  test_seq(["abc", "def", "ghi"], "abcdefghi");
 
   console.log("");
 };
 
 run_test_seq();
+
+/*** or test ***/
+
+const test_or = (expected, str) => {
+  const input = new libp.StringReader(str);
+  const parsers = expected.map(v => libp.string(v));
+
+  const parser = libp.or(...parsers);
+  const result = parser(input);
+
+  result.print();
+};
+
+const run_test_or = () => {
+  console.log("# or test");
+
+  test_or(["a", "b", "c"], "a");
+  test_or(["d", "e", "f"], "a");
+  test_or(["abc", "def", "ghi"], "abcdefghi");
+
+  console.log("");
+};
+
+run_test_or();
