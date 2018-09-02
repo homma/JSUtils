@@ -66,6 +66,10 @@ ParseFailure.prototype.print = function() {
       this.expected
     )} received: ${received}`
   );
+
+  // const len = this.reader.string.length;
+  // const parsed = this.reader.origin;
+  // console.log(`parsed ${parsed} characters from ${len} characters.`);
 };
 
 /*** parsers ***/
@@ -134,7 +138,8 @@ const seq = (...parsers) => input => {
       input.set_origin(origin);
       data.push(res.expected);
 
-      return new ParseFailure(data, input);
+      const error = data.reduce((acc, val) => `seq(${acc}, ${val})`);
+      return new ParseFailure(error, input);
     }
 
     data.push(res.data);
@@ -161,7 +166,8 @@ const or = (...parsers) => input => {
     expected.push(res.expected);
   }
 
-  return new ParseFailure(expected, input);
+  const error = expected.reduce((acc, val) => `or(${acc}, ${val})`);
+  return new ParseFailure(error, input);
 };
 
 /*
