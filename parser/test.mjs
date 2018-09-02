@@ -130,3 +130,27 @@ const run_test_or = () => {
 };
 
 run_test_or();
+
+/*** rep0 test ***/
+
+const test_rep0 = (str1, str) => {
+  const input = new libp.StringReader(str);
+
+  const parser = libp.rep0(libp.string(str1));
+  const result = parser(input);
+
+  result.print();
+};
+
+const run_test_rep0 = () => {
+  console.log("# rep0 test");
+
+  test_rep0("a", "aaa");
+  test_rep0("a", "abc");
+  test_rep0("b", "abc");
+  test_rep0("ab", "ababc");
+
+  console.log("");
+};
+
+run_test_rep0();

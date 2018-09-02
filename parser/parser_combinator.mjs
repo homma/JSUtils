@@ -158,9 +158,24 @@ const or = (...parsers) => input => {
 };
 
 /*
- * REP PARSER
+ * REP0 PARSER
  * parsing e*
  */
+
+export //
+const rep0 = parser => input => {
+  let result = [];
+
+  while (true) {
+    const res = parser(input);
+    if (!res.success) {
+      break;
+    }
+    result.push(res.data);
+  }
+
+  return new ParseSuccess(result);
+};
 
 /*
  * REP1 PARSER
