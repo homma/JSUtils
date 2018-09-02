@@ -1,4 +1,4 @@
-import * as h from "../hyperscript.mjs";
+import h from "./hyperscript.mjs";
 
 const test1 = () => {
   console.log("BEGIN TEST.");
@@ -32,13 +32,8 @@ const test1 = () => {
   console.log("END TEST.");
 };
 
-const test2 = () => {
-  // To be implemented
-};
-
 const main = () => {
   test1();
-  test2();
 };
 
 window.onload = main;

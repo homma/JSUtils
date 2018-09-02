@@ -2,13 +2,14 @@
  * @author Daisuke Homma
  */
 
-export //
-const hyperscript = function(tag, ...args) {
+const hyperscript = (tag, ...args) => {
   const elem = handleTag(tag);
   handleArgs(elem, args);
 
   return elem;
 };
+
+export default hyperscript;
 
 /*** utility functions ***/
 
