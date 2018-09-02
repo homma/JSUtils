@@ -94,7 +94,7 @@ const regexp = pattern => input => {
     return new ParseSuccess(res);
   }
 
-  return new ParseFailure(pattern, input);
+  return new ParseFailure(pattern.source, input);
 };
 
 export //
@@ -224,6 +224,21 @@ const opt = parser => input => {
  * ANDP PARSER
  * parsing &e (=notp(notp(e)))
  */
+
+export //
+const andp = parser => input => {
+  const origin = input.origin;
+
+  const result = parser(input);
+
+  if (result.success) {
+    input.set_origin(origin);
+
+    return new ParseSuccess([]);
+  }
+
+  return new ParseFailure(result.expected, input);
+};
 
 /*
  * NOTP PARSER

@@ -178,3 +178,29 @@ const run_test_rep1 = () => {
 };
 
 run_test_rep1();
+
+/*** andp test ***/
+
+const test_andp = (str1, str2, str) => {
+  const input = new libp.StringReader(str);
+
+  const parser = libp.seq(libp.andp(libp.string(str1)), libp.string(str2));
+  const result = parser(input);
+
+  result.print();
+};
+
+const run_test_andp = () => {
+  console.log("# andp test");
+
+  test_andp("a", "a", "aaa");
+  test_andp("a", "ab", "abc");
+  test_andp("a", "bc", "abc");
+  test_andp("b", "bc", "abc");
+  test_andp("ab", "abc", "abcbc");
+  test_andp("ab", "bcd", "ababc");
+
+  console.log("");
+};
+
+run_test_andp();
