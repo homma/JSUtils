@@ -110,6 +110,11 @@ const any1 = () => input => {
   return new ParseFailure("any char", input);
 };
 
+export //
+const empty = () => input => {
+  return new ParseSuccess([]);
+};
+
 /*** combinators ***/
 
 /*
@@ -186,9 +191,13 @@ const rep0 = parser => input => {
 
 export //
 const rep1 = parser => input => {
-  const p = modify(seq(parser, rep0(parser)), data =>
-    [data[0]].concat(data[1])
-  );
+  const p = modify(seq(parser, rep0(parser)), data => {
+    let fst = data[0];
+    if (fst == null) {
+      fst = [];
+    }
+    return fst.concat(data[1]);
+  });
 
   const result = p(input);
   return result;
@@ -198,6 +207,18 @@ const rep1 = parser => input => {
  * OPT PARSER
  * parsing e?
  */
+
+const opt = parser => input => {
+  const result = parser(input);
+
+  let data = [];
+
+  if (result.success) {
+    data = result.data;
+  }
+
+  return new ParseSuccess(data);
+};
 
 /*
  * ANDP PARSER
@@ -225,6 +246,7 @@ const modify = (parser, fun) => input => {
   const result = parser(input);
 
   if (result.success) {
+    // take care if result.data is null.
     const data = fun(result.data);
     return new ParseSuccess(data);
   }
