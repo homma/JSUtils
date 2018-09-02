@@ -1,11 +1,11 @@
-import * as libp from "./parser_combinator.mjs";
+import * as libp from "../parser_combinator.mjs";
 
-console.log("");
+console.log();
 
 /****** combinator test ******/
 
 console.log("## combinator test");
-console.log("");
+console.log();
 
 /*** seq test ***/
 
@@ -27,7 +27,7 @@ const run_test_seq = () => {
   test_seq(["a", "a"], "ab");
   test_seq(["abc", "def", "ghi"], "abcdefghi");
 
-  console.log("");
+  console.log();
 };
 
 run_test_seq();
@@ -51,7 +51,7 @@ const run_test_or = () => {
   test_or(["d", "e", "f"], "a");
   test_or(["abc", "def", "ghi"], "abcdefghi");
 
-  console.log("");
+  console.log();
 };
 
 run_test_or();
@@ -75,7 +75,7 @@ const run_test_rep0 = () => {
   test_rep0("b", "abc");
   test_rep0("ab", "ababc");
 
-  console.log("");
+  console.log();
 };
 
 run_test_rep0();
@@ -99,7 +99,7 @@ const run_test_rep1 = () => {
   test_rep1("b", "abc");
   test_rep1("ab", "ababc");
 
-  console.log("");
+  console.log();
 };
 
 run_test_rep1();
@@ -125,7 +125,7 @@ const run_test_andp = () => {
   test_andp("ab", "abc", "abcbc");
   test_andp("ab", "bcd", "ababc");
 
-  console.log("");
+  console.log();
 };
 
 run_test_andp();
@@ -151,7 +151,7 @@ const run_test_notp = () => {
   test_notp("bc", "abc", "abcbc");
   test_notp("ab", "bcd", "ababc");
 
-  console.log("");
+  console.log();
 };
 
 run_test_notp();

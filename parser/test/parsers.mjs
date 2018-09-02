@@ -1,11 +1,11 @@
-import * as libp from "./parser_combinator.mjs";
+import * as libp from "../parser_combinator.mjs";
 
-console.log("");
+console.log();
 
 /****** parser test ******/
 
 console.log("## parser test");
-console.log("");
+console.log();
 
 /*** string test ***/
 
@@ -32,7 +32,7 @@ const run_test_string = () => {
 `
   );
 
-  console.log("");
+  console.log();
 };
 
 run_test_string();
@@ -57,7 +57,7 @@ const run_test_regexp = () => {
   test_regexp(/[1-9][0-9]*/, "0123", 0);
   test_regexp(/[1-9][0-9]*/, "0123", 1);
 
-  console.log("");
+  console.log();
 };
 
 run_test_regexp();
@@ -79,7 +79,7 @@ const run_test_any1 = () => {
   test_any1("abc");
   test_any1("");
 
-  console.log("");
+  console.log();
 };
 
 run_test_any1();

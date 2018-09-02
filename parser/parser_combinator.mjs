@@ -192,7 +192,7 @@ const rep0 = parser => input => {
 export //
 const rep1 = parser => input => {
   const p = modify(seq(parser, rep0(parser)), data => {
-    let fst = data[0];
+    let fst = [data[0]];
     if (fst == null) {
       fst = [];
     }
@@ -208,6 +208,7 @@ const rep1 = parser => input => {
  * parsing e?
  */
 
+export //
 const opt = parser => input => {
   const result = parser(input);
 
@@ -267,6 +268,7 @@ const notp = parser => input => {
  * for recursive parser definitions
  */
 
+export //
 const lazy = callback => input => {
   return callback()(input);
 };
@@ -276,6 +278,7 @@ const lazy = callback => input => {
  * for mutate the resulting data
  */
 
+export //
 const modify = (parser, fun) => input => {
   const result = parser(input);
 
