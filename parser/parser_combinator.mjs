@@ -116,6 +116,7 @@ const any1 = () => input => {
  * SEQ PARSER
  * parsing e1 e2 e3 ...
  */
+
 export //
 const seq = (...parsers) => input => {
   const origin = input.origin;
@@ -141,6 +142,7 @@ const seq = (...parsers) => input => {
  * OR PARSER
  * parsing e1 / e2 / e3 / ...
  */
+
 export //
 const or = (...parsers) => input => {
   let expected = [];
@@ -182,6 +184,16 @@ const rep0 = parser => input => {
  * parsing e+ (= seq(e, rep(e)))
  */
 
+export //
+const rep1 = parser => input => {
+  const p = modify(seq(parser, rep0(parser)), data =>
+    [data[0]].concat(data[1])
+  );
+
+  const result = p(input);
+  return result;
+};
+
 /*
  * OPT PARSER
  * parsing e?
@@ -200,11 +212,22 @@ const rep0 = parser => input => {
 /*** utility functions ***/
 
 /*
- * LAZY
- *
+ * LAZY 
+ * for recursive parser definitions
  */
 
 /*
- * APPLY
- *
+ * MODIFY
+ * for mutate the resulting data
  */
+
+const modify = (parser, fun) => input => {
+  const result = parser(input);
+
+  if (result.success) {
+    const data = fun(result.data);
+    return new ParseSuccess(data);
+  }
+
+  return result;
+};

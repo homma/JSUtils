@@ -154,3 +154,27 @@ const run_test_rep0 = () => {
 };
 
 run_test_rep0();
+
+/*** rep1 test ***/
+
+const test_rep1 = (str1, str) => {
+  const input = new libp.StringReader(str);
+
+  const parser = libp.rep1(libp.string(str1));
+  const result = parser(input);
+
+  result.print();
+};
+
+const run_test_rep1 = () => {
+  console.log("# rep1 test");
+
+  test_rep1("a", "aaa");
+  test_rep1("a", "abc");
+  test_rep1("b", "abc");
+  test_rep1("ab", "ababc");
+
+  console.log("");
+};
+
+run_test_rep1();
