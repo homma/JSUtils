@@ -13,6 +13,7 @@ import {
   notp,
   any1
 } from "../parser_combinator.mjs";
+import assert from "./assert.mjs";
 
 const parse = str => {
   const input = new StringReader(str);
@@ -22,14 +23,26 @@ const parse = str => {
 
   const S = seq(andp(seq(A), string("c")), rep1(string("a")), B, notp(any1()));
 
-  S(input).print();
+  const result = S(input);
+  result.print();
+
+  return result;
 };
 
 const run_parse = () => {
   console.log();
-  parse("abc");
-  parse("aaabbbccc");
-  parse("aaabbbcc");
+
+  let result = parse("abc");
+  assert(result.success);
+  console.log();
+
+  result = parse("aaabbbccc");
+  assert(result.success);
+  console.log();
+
+  result = parse("aaabbbcc");
+  assert(!result.success);
+
   console.log();
 };
 

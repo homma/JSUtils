@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# run one test
+# run single test
 
 if [ x$1 = "x" ]; then
   echo "Usage: ./run_test.sh <TARGET>"
