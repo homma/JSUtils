@@ -267,6 +267,10 @@ const notp = parser => input => {
  * for recursive parser definitions
  */
 
+const lazy = callback => input => {
+  return callback()(input);
+};
+
 /*
  * MODIFY
  * for mutate the resulting data
