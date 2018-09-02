@@ -204,3 +204,29 @@ const run_test_andp = () => {
 };
 
 run_test_andp();
+
+/*** notp test ***/
+
+const test_notp = (str1, str2, str) => {
+  const input = new libp.StringReader(str);
+
+  const parser = libp.seq(libp.notp(libp.string(str1)), libp.string(str2));
+  const result = parser(input);
+
+  result.print();
+};
+
+const run_test_notp = () => {
+  console.log("# notp test");
+
+  test_notp("b", "a", "aaa");
+  test_notp("b", "ab", "abc");
+  test_notp("a", "bc", "abc");
+  test_notp("b", "bc", "abc");
+  test_notp("bc", "abc", "abcbc");
+  test_notp("ab", "bcd", "ababc");
+
+  console.log("");
+};
+
+run_test_notp();

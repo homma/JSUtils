@@ -245,6 +245,21 @@ const andp = parser => input => {
  * parsing !e
  */
 
+export //
+const notp = parser => input => {
+  const origin = input.origin;
+
+  const result = parser(input);
+
+  if (result.success) {
+    input.set_origin(origin);
+
+    return new ParseFailure("notp " + JSON.stringify(result.data), input);
+  }
+
+  return new ParseSuccess([]);
+};
+
 /*** utility functions ***/
 
 /*
