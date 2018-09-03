@@ -32,8 +32,8 @@
     }
 
     const [t1, id] = tag.split("#");
-    const [t2, ...cls] = t1.split(".");
-    const klass = cls.join(" ");
+    const [t2, ...classes] = t1.split(".");
+    const klass = classes.join(" ");
 
     const t3 = t2 || "div";
 
@@ -82,7 +82,7 @@
           }
         }
       } else {
-        console.log("unknown value found: ", val);
+        console.log(`unknown value found: ${val}`);
       }
     };
 
