@@ -126,8 +126,8 @@ const msleep = msec => new Promise(rs => setTimeout(rs, msec));
 
 export //
 const sleepMap = async (arr, msec, fun) => {
-  for (var i of arr) {
-    fun(arr[1]);
+  for (var o of arr) {
+    fun(o);
     await msleep(msec);
   }
 };
