@@ -108,18 +108,18 @@ const stringMap = (str, fun) => Array.from(str).map(fun);
 //// sleep
 
 // sleep
-// sleep x seconds
+// sleep sec seconds
 // needed to be used within an async function with await
 // usage: await sleep(3)
 
 export //
-const sleep = x => new Promise(rs => setTimeout(rs, x * 1000));
+const sleep = sec => new Promise(rs => setTimeout(rs, sec * 1000));
 
 // msleep
-// sleep x micro seconds
+// sleep msec microseconds
 
 export //
-const msleep = x => new Promise(rs => setTimeout(rs, x));
+const msleep = msec => new Promise(rs => setTimeout(rs, msec));
 
 // sleepMap
 // apply function with msec delay
