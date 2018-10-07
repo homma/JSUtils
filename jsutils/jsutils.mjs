@@ -57,6 +57,17 @@ const isNumber = val => typeof val === "number";
 export //
 const isString = val => typeof val === "string";
 
+// isArray
+
+export //
+const isArray = arr => Array.isArray(arr);
+
+// isEmpty
+// is an empty array?
+
+export //
+const isEmpty = arr => isArray(arr) && arr.length == 0;
+
 // isDate
 
 export //

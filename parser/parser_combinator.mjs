@@ -49,6 +49,22 @@ const ParseSuccess = function(data) {
   this.data = data;
 };
 
+ParseSuccess.prototype.prettify = function() {
+
+  const pret = el => {
+
+    if(el == []) {
+
+    } else if(typeof el === "string") {
+
+    } else {
+
+    }
+
+  }
+
+}
+
 ParseSuccess.prototype.print = function() {
   console.log(`[Parse Succeeded] accepted: ${JSON.stringify(this.data)}`);
 };

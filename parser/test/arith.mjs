@@ -50,6 +50,10 @@ const run_parse = () => {
   result = parse("(1)+1)*10");
   assert(!result.success);
   console.log();
+
+  result = parse("1+2*3+4");
+  assert(!result.success);
+  console.log();
 };
 
 run_parse();
