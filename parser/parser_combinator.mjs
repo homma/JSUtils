@@ -50,23 +50,45 @@ const ParseSuccess = function(data) {
 };
 
 ParseSuccess.prototype.prettify = function() {
+  const pretty = el => {
+    const isEmpty = arr => Array.isArray(arr) && arr.length == 0;
+    const isString = el => typeof el == "string";
+    const hasSingleChild = arr => Array.isArray(arr) && arr.length == 1;
 
-  const pret = el => {
+    let result = [];
 
-    if(el == []) {
+    for (let e of el) {
+      // lift single element
+      // ["1"] => "1"
+      // [["foo", "bar"]] => ["foo", "bar"]
+      if (hasSingleChild(e)) {
+        e = e[0];
+      }
 
-    } else if(typeof el === "string") {
-
-    } else {
-
+      // remove empty
+      // [[], "1"] => ["1"]
+      if (isEmpty(e)) {
+        continue;
+      } else if (isString(e)) {
+        result.push(e);
+      } else {
+        result.push(pretty(e));
+      }
     }
 
-  }
+    // lift single element
+    if (hasSingleChild(result)) {
+      result = result[0];
+    }
 
-}
+    return result;
+  };
+
+  return pretty(this.data);
+};
 
 ParseSuccess.prototype.print = function() {
-  console.log(`[Parse Succeeded] accepted: ${JSON.stringify(this.data)}`);
+  console.log(`[Parse Succeeded] accepted: ${JSON.stringify(this.prettify())}`);
 };
 
 const ParseFailure = function(expected, reader) {

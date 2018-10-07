@@ -8,6 +8,13 @@ import { StringReader } from "../parser_combinator.mjs";
 import parser from "../examples/arith.mjs";
 import assert from "./assert.mjs";
 
+console.log();
+
+/****** arithmatic grammar test ******/
+
+console.log("## arithmatic grammar test");
+console.log();
+
 const parse = str => {
   const input = new StringReader(str);
 
@@ -23,36 +30,49 @@ const parse = str => {
 };
 
 const run_parse = () => {
-  console.log();
-
+  let input = {};
   let result = {};
 
-  result = parse("1+1");
+  input = "1+1";
+  console.log(`input: ${input}`);
+  result = parse(input);
   assert(result.success);
   console.log();
 
-  result = parse("(1+1)*10");
+  input = "(1+1)*10";
+  console.log(`input: ${input}`);
+  result = parse(input);
   assert(result.success);
   console.log();
 
-  result = parse("a");
+  input = "a";
+  console.log(`input: ${input}`);
+  result = parse(input);
   assert(!result.success);
   console.log();
 
-  result = parse(" ");
+  input = " ";
+  console.log(`input: ${input}`);
+  result = parse(input);
   assert(!result.success);
   console.log();
 
-  result = parse("(1+1) *10");
+  input = "(1+1) *10";
+  console.log(`input: ${input}`);
+  result = parse(input);
   assert(!result.success);
   console.log();
 
-  result = parse("(1)+1)*10");
+  input = "(1)+1)*10";
+  console.log(`input: ${input}`);
+  result = parse(input);
   assert(!result.success);
   console.log();
 
-  result = parse("1+2*3+4");
-  assert(!result.success);
+  input = "1+2*3+4";
+  console.log(`input: ${input}`);
+  result = parse(input);
+  assert(result.success);
   console.log();
 };
 
