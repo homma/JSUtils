@@ -57,6 +57,12 @@ const run_parse = () => {
   assert(result.success);
   console.log();
 
+  input = "42";
+  console.log(`input: ${input}`);
+  result = parse(input);
+  assert(result.success);
+  console.log();
+
   input = "a";
   console.log(`input: ${input}`);
   result = parse(input);

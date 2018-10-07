@@ -46,6 +46,13 @@ const run_test = () => {
   assert(result.result == 8);
   console.log();
 
+  input = "42";
+  console.log(`input: ${input}`);
+  result = calc(input);
+  console.log(`output: ${result.result}`);
+  assert(result.result == 42);
+  console.log();
+
   input = "not an arithmatic";
   console.log(`input: ${input}`);
   result = calc(input);

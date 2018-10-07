@@ -27,7 +27,10 @@ const isOp = v => op.includes(v);
 
 // transform parsed data
 const transform = (data, val) => {
-  let ret = null;
+  // data is a value -- "42"
+  if (isString(data)) {
+    return parseInt(data);
+  }
 
   const hd = data.shift();
   const tl = data;
@@ -38,13 +41,11 @@ const transform = (data, val) => {
     const pair = tl.length == 1 && isString(tl[0]);
 
     if (pair) {
-      ret = [hd, val, parseInt(tl[0])];
-      return ret;
+      return [hd, val, parseInt(tl[0])];
     }
 
     // tl is a list -- ex: ["+", [["/", "4"], ["*", "6"]]]
-    ret = [hd, val, transform(tl, "UNREACHABLE")];
-    return ret;
+    return [hd, val, transform(tl, "UNREACHABLE")];
   }
 
   // remove parenthesis
