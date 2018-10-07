@@ -45,6 +45,12 @@ const run_parse = () => {
   assert(result.success);
   console.log();
 
+  input = "1+2/3-4*5+6";
+  console.log(`input: ${input}`);
+  result = parse(input);
+  assert(result.success);
+  console.log();
+
   input = "a";
   console.log(`input: ${input}`);
   result = parse(input);
