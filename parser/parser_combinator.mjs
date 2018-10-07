@@ -49,7 +49,33 @@ const ParseSuccess = function(data) {
   this.data = data;
 };
 
-ParseSuccess.prototype.prettify = function() {
+ParseSuccess.prototype.print = function() {
+  console.log(
+    `[Parse Succeeded] accepted: ${JSON.stringify(prettify(this.data))}`
+  );
+};
+
+const ParseFailure = function(expected, at, reader) {
+  this.success = false;
+  this.expected = expected;
+  this.at = at;
+  this.reader = reader;
+};
+
+ParseFailure.prototype.print = function() {
+  const received = this.reader.string.substr(this.at, 20);
+  console.log(
+    `[Parse Failed]    expected: ${JSON.stringify(this.expected)} at: ${
+      this.at
+    } received: ${received}`
+  );
+
+  // const len = this.reader.string.length;
+  // const parsed = this.reader.origin;
+  // console.log(`parsed ${parsed} characters from ${len} characters.`);
+};
+
+const prettify = data => {
   const pretty = el => {
     const isEmpty = arr => Array.isArray(arr) && arr.length == 0;
     const isString = el => typeof el == "string";
@@ -84,30 +110,7 @@ ParseSuccess.prototype.prettify = function() {
     return result;
   };
 
-  return pretty(this.data);
-};
-
-ParseSuccess.prototype.print = function() {
-  console.log(`[Parse Succeeded] accepted: ${JSON.stringify(this.prettify())}`);
-};
-
-const ParseFailure = function(expected, reader) {
-  this.success = false;
-  this.expected = expected;
-  this.reader = reader;
-};
-
-ParseFailure.prototype.print = function() {
-  const received = this.reader.string.substr(this.reader.origin, 20);
-  console.log(
-    `[Parse Failed]    expected: ${JSON.stringify(
-      this.expected
-    )} received: ${received}`
-  );
-
-  // const len = this.reader.string.length;
-  // const parsed = this.reader.origin;
-  // console.log(`parsed ${parsed} characters from ${len} characters.`);
+  return pretty(data);
 };
 
 /*** parsers ***/
@@ -123,7 +126,7 @@ const string = str => input => {
     return new ParseSuccess(str);
   }
 
-  return new ParseFailure(str, input);
+  return new ParseFailure(str, input.origin, input);
 };
 
 export //
@@ -136,7 +139,7 @@ const regexp = pattern => input => {
     return new ParseSuccess(res);
   }
 
-  return new ParseFailure(pattern.source, input);
+  return new ParseFailure(pattern.source, input.origin, input);
 };
 
 export //
@@ -149,7 +152,7 @@ const any1 = () => input => {
     return new ParseSuccess(res);
   }
 
-  return new ParseFailure("any char", input);
+  return new ParseFailure("any char", input.origin, input);
 };
 
 export //
@@ -173,11 +176,7 @@ const seq = (...parsers) => input => {
     const res = parser(input);
 
     if (!res.success) {
-      input.set_origin(origin);
-      data.push(res.expected);
-
-      const error = data.reduce((acc, val) => `seq(${acc}, ${val})`);
-      return new ParseFailure(error, input);
+      return res;
     }
 
     data.push(res.data);
@@ -205,7 +204,7 @@ const or = (...parsers) => input => {
   }
 
   const error = expected.reduce((acc, val) => `or(${acc}, ${val})`);
-  return new ParseFailure(error, input);
+  return new ParseFailure(error, input.origin, input);
 };
 
 /*
@@ -282,7 +281,8 @@ const andp = parser => input => {
     return new ParseSuccess([]);
   }
 
-  return new ParseFailure(result.expected, input);
+  // ParseFailure
+  return result;
 };
 
 /*
@@ -299,7 +299,11 @@ const notp = parser => input => {
   if (result.success) {
     input.set_origin(origin);
 
-    return new ParseFailure("notp " + JSON.stringify(result.data), input);
+    return new ParseFailure(
+      "notp " + JSON.stringify(result.data),
+      input.origin,
+      input
+    );
   }
 
   return new ParseSuccess([]);

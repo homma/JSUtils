@@ -1,4 +1,5 @@
 import * as libp from "../parser_combinator.mjs";
+import assert from "./assert.mjs";
 
 console.log();
 
@@ -9,7 +10,7 @@ console.log();
 
 /*** seq test ***/
 
-const test_seq = (expected, str) => {
+const test_seq = (expected, str, succeeds) => {
   const input = new libp.StringReader(str);
   const parsers = expected.map(v => libp.string(v));
 
@@ -17,15 +18,23 @@ const test_seq = (expected, str) => {
   const result = parser(input);
 
   result.print();
+
+  if (succeeds) {
+    assert(result.success);
+  } else {
+    assert(!result.success);
+  }
+
+  console.log();
 };
 
 const run_test_seq = () => {
   console.log("# seq test");
 
-  test_seq(["a", "a"], "aa");
-  test_seq(["a", "a", "a"], "aaa");
-  test_seq(["a", "a"], "ab");
-  test_seq(["abc", "def", "ghi"], "abcdefghi");
+  test_seq(["a", "a"], "aa", true);
+  test_seq(["a", "a", "a"], "aaa", true);
+  test_seq(["a", "a"], "ab", false);
+  test_seq(["abc", "def", "ghi"], "abcdefghi", true);
 
   console.log();
 };
