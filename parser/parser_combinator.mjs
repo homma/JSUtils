@@ -49,6 +49,10 @@ const ParseSuccess = function(data) {
   this.data = data;
 };
 
+ParseSuccess.prototype.shaved = function() {
+  return prettify(this.data);
+};
+
 ParseSuccess.prototype.print = function() {
   console.log(
     `[Parse Succeeded] accepted: ${JSON.stringify(prettify(this.data))}`
