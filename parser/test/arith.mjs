@@ -8,12 +8,10 @@ import { StringReader } from "../parser_combinator.mjs";
 import parser from "../examples/arith.mjs";
 import assert from "./assert.mjs";
 
-console.log();
-
 /****** arithmatic grammar test ******/
 
-console.log("## arithmatic grammar test");
 console.log();
+console.log("## arithmatic grammar test");
 
 const parse = str => {
   const input = new StringReader(str);
@@ -30,6 +28,8 @@ const parse = str => {
 };
 
 const run_parse = () => {
+  console.log();
+
   let input = {};
   let result = {};
 

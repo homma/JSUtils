@@ -54,6 +54,7 @@ const test_rep0_seq = (str1, str2, str) => {
 const run_test_rep0_seq = () => {
   console.log("# test rep0 - seq");
 
+  let input = {};
   let result = {};
 
   result = test_rep0_seq("+", "-", "+-");
