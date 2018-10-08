@@ -342,3 +342,29 @@ const modify = (parser, fun) => input => {
 
   return result;
 };
+
+/*
+ * LEFTREC
+ * for mutating right recursive data to left recursive
+ */
+
+// helper function
+const isEmpty = v => Array.isArray(v) && v.length == 0;
+
+export //
+const leftrec = v => {
+  const hd = v[0];
+  const tl = v[1];
+
+  // ["1", []] => ["1"]
+  if (isEmpty(tl)) {
+    return [hd];
+  }
+
+  // [["1"], [["*", "2"],[...]]] => [["*", "1", "2"],[...]]
+  const left = v[0];
+  const op = v[1][0][0];
+  const right = v[1][0][1];
+  const rest = v[1].slice(1);
+  return leftrec([[op, left, right], rest]);
+};

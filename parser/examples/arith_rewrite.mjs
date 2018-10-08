@@ -32,27 +32,9 @@ import {
   rep0,
   notp,
   any1,
-  modify
+  modify,
+  leftrec
 } from "../parser_combinator.mjs";
-
-const isEmpty = v => Array.isArray(v) && v.length == 0;
-
-const leftassoc = data => {
-  const hd = data[0];
-  const tl = data[1];
-
-  // ["1", []] => ["1"]
-  if (isEmpty(tl)) {
-    return [hd];
-  }
-
-  // [["1"], [["*", "2"],[...]]] => [["*", "1", "2"],[...]]
-  const left = data[0];
-  const op = data[1][0][0];
-  const right = data[1][0][1];
-  const rest = data[1].slice(1);
-  return leftassoc([[op, left, right], rest]);
-};
 
 const parser = input => {
   const Value = lazy(() =>
@@ -61,12 +43,12 @@ const parser = input => {
 
   const Product = modify(
     seq(Value, rep0(seq(or(string("*"), string("/")), Value))),
-    data => leftassoc(data)
+    data => leftrec(data)
   );
 
   const Sum = modify(
     seq(Product, rep0(seq(or(string("+"), string("-")), Product))),
-    data => leftassoc(data)
+    data => leftrec(data)
   );
 
   const Expr = seq(Sum, notp(any1()));

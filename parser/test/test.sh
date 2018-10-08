@@ -9,3 +9,4 @@ node --experimental-modules ./non-cfg.mjs
 node --experimental-modules ./arith.mjs
 node --experimental-modules ./calc.mjs
 node --experimental-modules ./arith_rewrite.mjs
+node --experimental-modules ./left_rec_elim.mjs
