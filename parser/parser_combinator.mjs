@@ -372,7 +372,7 @@ const leftrec = v => {
 /*
  * LEFT
  *
- * converts left recursion to right ricursion
+ * converts left recursion to right recursion
  */
 
 export //
