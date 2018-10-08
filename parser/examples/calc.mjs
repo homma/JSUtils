@@ -50,7 +50,7 @@ const transform = (data, val) => {
 
   // remove parenthesis
   if (hd == "(") {
-    return transform(tl.slice(0, tl.length - 1));
+    return transform(tl.slice(0, tl.length - 1), val);
   }
 
   // hd is a value
@@ -61,10 +61,10 @@ const transform = (data, val) => {
   // isArray(hd)
 
   if (isEmpty(tl)) {
-    return [transform(hd, val)];
+    return transform(hd, val);
   }
 
-  return [transform(tl, transform(hd, val))];
+  return transform(tl, transform(hd, val));
 };
 
 // do calculate

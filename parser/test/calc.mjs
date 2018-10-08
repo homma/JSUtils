@@ -25,18 +25,18 @@ const run_test = () => {
   assert(result.result == 2);
   console.log();
 
-  input = "1+2-3+4";
+  input = "1+2-3+4+5";
   console.log(`input: ${input}`);
   result = calc(input);
   console.log(`output: ${result.result}`);
-  assert(result.result == 4);
+  assert(result.result == 9);
   console.log();
 
-  input = "(1+1)*10";
+  input = "(1+1)*10+((2+3)*4)/2";
   console.log(`input: ${input}`);
   result = calc(input);
   console.log(`output: ${result.result}`);
-  assert(result.result == 20);
+  assert(result.result == 30);
   console.log();
 
   input = "1+6/3*4+5-6";
