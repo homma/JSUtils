@@ -4,6 +4,12 @@
  *
  */
 
+/*** miscellaneous helper functions ***/
+
+const isEmpty = arr => Array.isArray(arr) && arr.length == 0;
+const isString = el => typeof el == "string";
+const hasSingleChild = arr => Array.isArray(arr) && arr.length == 1;
+
 /*** String Reader ***/
 
 export //
@@ -47,6 +53,8 @@ StringReader.prototype.set_origin = function(n) {
 const ParseSuccess = function(data) {
   this.success = true;
   this.data = data;
+
+  dprint(this);
 };
 
 ParseSuccess.prototype.shaved = function() {
@@ -64,6 +72,8 @@ const ParseFailure = function(expected, at, reader) {
   this.expected = expected;
   this.at = at;
   this.reader = reader;
+
+  dprint(this);
 };
 
 ParseFailure.prototype.print = function() {
@@ -81,10 +91,6 @@ ParseFailure.prototype.print = function() {
 
 const prettify = data => {
   const pretty = el => {
-    const isEmpty = arr => Array.isArray(arr) && arr.length == 0;
-    const isString = el => typeof el == "string";
-    const hasSingleChild = arr => Array.isArray(arr) && arr.length == 1;
-
     let result = [];
 
     for (let e of el) {
@@ -124,6 +130,8 @@ const string = str => input => {
   const len = str.length;
   const res = input.read(len);
 
+  dprint(`string: ${res}`);
+
   if (res == str) {
     input.advance(len);
 
@@ -136,6 +144,8 @@ const string = str => input => {
 export //
 const regexp = pattern => input => {
   const res = input.regexp_read(pattern);
+
+  dprint(`regexp: ${res}`);
 
   if (res) {
     input.advance(res.length);
@@ -150,6 +160,8 @@ export //
 const any1 = () => input => {
   const res = input.read(1);
 
+  dprint(`any1: ${res}`);
+
   if (res.length == 1) {
     input.advance(1);
 
@@ -161,6 +173,8 @@ const any1 = () => input => {
 
 export //
 const empty = () => input => {
+  dprint(`empty parser`);
+
   return new ParseSuccess([]);
 };
 
@@ -175,6 +189,8 @@ export //
 const seq = (...parsers) => input => {
   const origin = input.origin;
   const data = [];
+
+  dprint(`seq parser`);
 
   for (let parser of parsers) {
     const res = parser(input);
@@ -198,6 +214,8 @@ export //
 const or = (...parsers) => input => {
   let expected = [];
 
+  dprint(`or parser`);
+
   for (let parser of parsers) {
     const res = parser(input);
     if (res.success) {
@@ -220,6 +238,8 @@ export //
 const rep0 = parser => input => {
   let result = [];
 
+  dprint(`rep0 parser`);
+
   while (true) {
     const res = parser(input);
     if (!res.success) {
@@ -238,6 +258,8 @@ const rep0 = parser => input => {
 
 export //
 const rep1 = parser => input => {
+  dprint(`rep1 parser`);
+
   const p = modify(seq(parser, rep0(parser)), data => {
     let fst = [data[0]];
     if (fst == null) {
@@ -259,6 +281,8 @@ export //
 const opt = parser => input => {
   const result = parser(input);
 
+  dprint(`opt: ${result}`);
+
   let data = [];
 
   if (result.success) {
@@ -278,6 +302,8 @@ const andp = parser => input => {
   const origin = input.origin;
 
   const result = parser(input);
+
+  dprint(`andp: ${result}`);
 
   if (result.success) {
     input.set_origin(origin);
@@ -299,6 +325,8 @@ const notp = parser => input => {
   const origin = input.origin;
 
   const result = parser(input);
+
+  dprint(`notp: ${result}`);
 
   if (result.success) {
     input.set_origin(origin);
@@ -348,9 +376,6 @@ const modify = (parser, fun) => input => {
  * for mutating right recursive data to left recursive
  */
 
-// helper function
-const isEmpty = v => Array.isArray(v) && v.length == 0;
-
 export //
 const leftrec = v => {
   const hd = v[0];
@@ -371,7 +396,6 @@ const leftrec = v => {
 
 /*
  * LEFT
- *
  * converts left recursion to right recursion
  */
 
@@ -381,4 +405,31 @@ const left = (rec, tail, val) => {
   const tail_parser = rep0(tail);
 
   return parser;
+};
+
+/*
+ * TRACE
+ * trace parser invocations
+ */
+
+// debug printer
+const debug_print = str => {
+  console.log(str);
+};
+
+// do nothing printer
+const no_print = str => {};
+
+// default is do nothing
+let dprint = no_print;
+
+export //
+const trace = parser => input => {
+  dprint = debug_print;
+
+  const result = parser(input);
+
+  dprint = no_print;
+
+  return result;
 };
