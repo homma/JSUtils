@@ -368,3 +368,17 @@ const leftrec = v => {
   const rest = v[1].slice(1);
   return leftrec([[op, left, right], rest]);
 };
+
+/*
+ * LEFT
+ *
+ * converts left recursion to right ricursion
+ */
+
+export //
+const left = (rec, tail, val) => {
+  const parser = lazy(() => modify(seq(val, tail_parser), leftrec));
+  const tail_parser = rep0(tail);
+
+  return parser;
+};
