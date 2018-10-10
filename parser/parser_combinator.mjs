@@ -355,7 +355,7 @@ const lazy = callback => input => {
 
 /*
  * MODIFY
- * for mutate the resulting data
+ * mutate the resulting data
  */
 
 export //
@@ -373,7 +373,7 @@ const modify = (parser, fun) => input => {
 
 /*
  * LEFTREC
- * for mutating right recursive data to left recursive
+ * mutate the data from right recursive to left recursive
  */
 
 export //
@@ -396,7 +396,7 @@ const leftrec = v => {
 
 /*
  * LEFT
- * converts left recursion to right recursion
+ * make a right recursion parser (left factoring)
  */
 
 export //
