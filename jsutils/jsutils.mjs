@@ -116,6 +116,26 @@ const implode = arr => arr.join("");
 export //
 const stringMap = (str, fun) => Array.from(str).map(fun);
 
+//// Array manipulation
+
+// flatten
+// flatten a nested array
+
+export //
+const flatten = arr =>
+  arr.reduce((acc, cur) => {
+    let ret;
+
+    if (Array.isArray(cur)) {
+      ret = acc.concat(flatten(cur));
+    } else {
+      acc.push(cur);
+      ret = acc;
+    }
+
+    return ret;
+  }, []);
+
 //// sleep
 
 // sleep
