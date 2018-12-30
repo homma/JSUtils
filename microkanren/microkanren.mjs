@@ -240,7 +240,7 @@ const mplus = (strm1, strm2) => {
   }
 
   if (strm1 instanceof Function) {
-    return () => mplus(strm2, [strm1]);
+    return () => mplus(strm2, strm1());
   }
 
   return new Pair(strm1.slist, mplus(strm1.cntr, strm2));
@@ -252,7 +252,7 @@ const bind = (strm, g) => {
   }
 
   if (strm instanceof Function) {
-    return () => bind([strm], g);
+    return () => bind(strm(), g);
   }
 
   return mplus(g(strm.subst), bind(strm.cntr, g));
