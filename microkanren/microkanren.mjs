@@ -1,53 +1,78 @@
-////// Data Structures
+//// Debugging Utilities
 
-const debug = console.log;
-const nebug = () => {};
+let nebug = () => {};
+let debug = console.log;
+let enable_debug = 0;
 
-//// Pair
-function Pair(fst, snd) {
-  this.fst = fst;
-  this.snd = snd;
+if (enable_debug) {
+  nebug = debug;
 }
 
-//// Substitution
+//// Data Structures
+
+// Var : logical variable
+function Var(val) {
+  this.val = val;
+}
+
+Var.prototype.toString = function() {
+  return String(this.val);
+};
+
+const is_var = v => v instanceof Var;
+
+const is_equal = (v1, v2) => v1.val == v2.val;
+
+// Substitution
+// fst : Var or value
+// snd : Var or value
 function Substitution(fst, snd) {
   this.fst = fst;
   this.snd = snd;
 }
 
-//// State : a pair of a substitution list and a counter
-function State(substitution_list, counter) {
-  this.slist = substitution_list;
+Substitution.prototype.toString = function() {
+  let fst_data = this.fst;
+  if (is_var(this.fst)) {
+    fst_data = `Var(${this.fst.val})`;
+  }
+
+  let snd_data = this.snd;
+  if (is_var(this.snd)) {
+    snd_data = `Var(${this.snd.val})`;
+  }
+
+  return `Substitution { fst: ${fst_data}, snd: ${snd_data} }`;
+};
+
+// State : a pair of a substitution list and a counter
+// slist : a substitution list
+// counter : integer
+function State(slist, counter) {
+  this.slist = slist;
   this.cntr = counter;
 }
 
-//// logical variable
+State.prototype.toString = function() {
+  let slist_data = "";
+  for (let subst of this.slist) {
+    slist_data += subst.toString();
+    slist_data += ", ";
+  }
+  slist_data = slist_data.substr(0, slist_data.length - 2);
 
-function Var(val) {
-  this.val = val;
-}
-
-const is_var = x => x instanceof Var;
-
-const is_equal = (x1, x2) => x1.val == x2.val;
-
-const test_var = () => {
-  console.log("== test var ==");
-
-  const a = new Var(3);
-  const b = new Var(4);
-  const res = is_equal(a, b);
-  console.log(res);
+  return `State { slist : [ ${slist_data} ], cntr : ${this.cntr} }`;
 };
 
-// test_var();
+// Stream : a sequence of State
+// we use Array for the stream
 
 //// walk
 
 const walk = (term, slist) => {
-  debug("== walk ==");
-  debug(`term: ${term}`);
-  debug(`subst: ${slist}`);
+  nebug("== walk ==");
+  nebug(`term: ${term}`);
+  nebug(`subst: ${slist}`);
 
   let predicates = null;
 
@@ -55,7 +80,7 @@ const walk = (term, slist) => {
     predicates = slist.filter(subst => is_equal(term, subst.fst));
   }
 
-  debug(`predicates: ${predicates}`);
+  nebug(`predicates: ${predicates}`);
 
   if (predicates && predicates.length !== 0) {
     return walk(predicates[0].snd, slist);
@@ -63,26 +88,6 @@ const walk = (term, slist) => {
     return term;
   }
 };
-
-const test_walk = () => {
-  console.log("== test walk ==");
-
-  const slist = [
-    new Substitution(new Var(0), new Var(1)),
-    new Substitution(new Var(1), "foo")
-  ];
-
-  let res = walk(new Var(0), slist);
-  console.log(`result is ${res}`);
-
-  res = walk(new Var(1), slist);
-  console.log(`result is ${res}`);
-
-  res = walk("bar", slist);
-  console.log(`result is ${res}`);
-};
-
-// test_walk();
 
 // extends substitution list
 // v : Var
@@ -95,33 +100,40 @@ const extend_slist = (v, val, slist) => {
   return ret;
 };
 
-const unit = sc => new Pair(sc, mzero);
+// stream_from : unit ; make stream
+const stream_from = state => [state];
 
-const mzero = [];
+// empty_stream : mzero ; empty stream
+const empty_stream = () => [];
 
 //// unification
 
+// unify : do unification
+// term1 : Var or value
+// term2 : Var or value
+// slist : a substitution list
+// returns : a substitution list or false
 const unify = (term1, term2, slist) => {
   const u = walk(term1, slist);
   const v = walk(term2, slist);
 
   if (is_var(u) && is_var(v) && is_equal(u, v)) {
-    debug("var u and var v and equal");
+    nebug("var u and var v and equal");
     return slist;
   }
 
   if (is_var(u)) {
-    debug("var u and val v");
+    nebug("var u and val v");
     return extend_slist(u, v, slist);
   }
 
   if (is_var(v)) {
-    debug("var v and val u");
+    nebug("var v and val u");
     return extend_slist(v, u, slist);
   }
 
   if (u instanceof Substitution && v instanceof Substitution) {
-    debug("subst u and subst v");
+    nebug("subst u and subst v");
     const s = unify(u.fst, v.fst, slist);
     if (s) {
       return unify(u.snd, v.snd, slist);
@@ -137,125 +149,65 @@ const unify = (term1, term2, slist) => {
   }
 };
 
-const test_unify = () => {
-  console.log("== test unify ==");
-
-  let test_no = 0;
-  let t1 = null;
-  let t2 = null;
-  let slist = null;
-
-  console.log(`== test unify ${test_no} ==`);
-  test_no++;
-  t1 = new Var(0);
-  t2 = new Var(0);
-  slist = [];
-  console.log(`t1: ${t1}, t2: ${t2}, slist: ${slist}`);
-  console.log(unify(t1, t2, slist));
-
-  console.log(`== test unify ${test_no} ==`);
-  test_no++;
-  t1 = new Var(0);
-  t2 = "foo";
-  slist = [];
-  console.log(`t1: ${t1}, t2: ${t2}, slist: ${slist}`);
-  console.log(unify(t1, t2, slist));
-
-  console.log(`== test unify ${test_no} ==`);
-  test_no++;
-  t1 = "foo";
-  t2 = new Var(0);
-  slist = [];
-  console.log(`t1: ${t1}, t2: ${t2}, slist: ${slist}`);
-  console.log(unify(t1, t2, slist));
-
-  console.log(`== test unify ${test_no} ==`);
-  test_no++;
-  t1 = new Var(0);
-  t2 = "foo";
-  slist = [new Substitution(new Var(0), "bar")];
-  console.log(`t1: ${t1}, t2: ${t2}, slist: ${slist}`);
-  console.log(unify(t1, t2, slist));
-
-  console.log(`== test unify ${test_no} ==`);
-  test_no++;
-  t1 = new Var(0);
-  t2 = "foo";
-  slist = [new Substitution(new Var(1), "bar")];
-  console.log(`t1: ${t1}, t2: ${t2}, slist: ${slist}`);
-  console.log(unify(t1, t2, slist));
-
-  console.log(`== test unify ${test_no} ==`);
-  test_no++;
-  t1 = new Var(0);
-  t2 = "foo";
-  slist = [
-    new Substitution(new Var(1), new Var(2)),
-    new Substitution(new Var(2), "bar")
-  ];
-  console.log(`t1: ${t1}, t2: ${t2}, slist: ${slist}`);
-  console.log(unify(t1, t2, slist));
-
-  console.log(`== test unify ${test_no} ==`);
-  test_no++;
-  t1 = "foo";
-  t2 = "foo";
-  slist = [];
-  console.log(`t1: ${t1}, t2: ${t2}, slist: ${slist}`);
-  console.log(unify(t1, t2, slist));
-};
-
-// test_unify();
-
 //// goal constructors
 
 // equivalent : ==
-// sc : State
-const equivalent = (term1, term2) => sc => {
-  const s = unify(term1, term2, sc.slist);
+// state : State
+const equivalent = (term1, term2) => state => {
+  const slist = unify(term1, term2, state.slist);
 
-  if (s) {
-    debug("unit");
-    return unit(new State(s, sc.cntr));
+  if (slist) {
+    nebug("stream_from");
+    return stream_from(new State(slist, state.cntr));
   } else {
-    debug("mzero");
-    return mzero;
+    nebug("empty_stream");
+    return empty_stream();
   }
 };
 
-const call_fresh = f => sc => {
-  let cnt = sc.cntr;
-  const fun = f(new Var(cnt));
+const call_fresh = fun => state => {
+  let cnt = state.cntr;
+  const f = fun(new Var(cnt));
   cnt++;
-  fun(new State(sc.slist, cnt));
+  return f(new State(state.slist, cnt));
 };
 
-const disj = (g1, g2) => sc => mplus(g1(sc), g2(sc));
+// disjunction
+const disj = (goal1, goal2) => state =>
+  merge_stream(goal1(state), goal2(state));
 
-const conj = (g1, g2) => sc => bind(g1(sc), g2);
+// conjunction
+const conj = (goal1, goal2) => state => bind(goal1(state), goal2);
 
-const mplus = (strm1, strm2) => {
-  if (strm1 === null) {
+// merge_stream : merge two streams
+// original : mplus
+// strm1 : first stream
+// strm2 : second stream
+// returns : a merged stream
+const merge_stream = (strm1, strm2) => {
+  if (strm1.length === 0) {
     return strm2;
   }
 
+  // strm1[0]?
   if (strm1 instanceof Function) {
-    return () => mplus(strm2, strm1());
+    return () => merge_stream(strm2, strm1());
   }
 
-  return new Pair(strm1.slist, mplus(strm1.cntr, strm2));
+  strm1.slice(0, 1).push(merge_stream(strm1(1), strm2));
+  return strm1;
 };
 
-const bind = (strm, g) => {
-  if (strm === null) {
-    return mzero;
+const bind = (strm, goal) => {
+  if (strm.length === 0) {
+    return empty_stream();
   }
 
   if (strm instanceof Function) {
-    return () => bind(strm(), g);
+    return () => bind(strm(), goal);
   }
 
-  return mplus(g(strm.subst), bind(strm.cntr, g));
+  return merge_stream(goal(strm.slice(0, 1)), bind(strm.slice(1), goal));
 };
 
 //// Test
@@ -264,7 +216,7 @@ const test1 = () => {
   const empty_state = new State([], 0);
   const f = call_fresh(q => equivalent(q, 5));
   const res = f(empty_state);
-  console.log(res);
+  res.forEach(v => console.log(v.toString()));
 };
 
-// test1();
+test1();
