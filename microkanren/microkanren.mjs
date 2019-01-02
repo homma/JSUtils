@@ -100,7 +100,7 @@ const empty_state = () => new State([], 0);
 // for mature stream : (state . (state . (state . empty-stream))))
 // for immature stream : (state . (state . (state . procedure)))
 //
-// instead, we use Array for the stream
+// instead, we use Array for a stream
 // for mature stream : [state, state, state]
 // for immature stream : [state, state, fun]
 
