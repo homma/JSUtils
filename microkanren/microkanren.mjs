@@ -113,7 +113,7 @@ export //
 const get_fun = strm => {
   if (!is_fun(strm)) {
     console.log(
-      `ERROR: ${strm} is not a function in the last of an immature stream.`
+      `ERROR: ${strm} is not a function at the last of an immature stream.`
     );
   }
 
