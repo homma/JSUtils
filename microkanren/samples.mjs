@@ -56,11 +56,3 @@ const sample5 = () => {
 };
 
 // sample5();
-
-//// Test
-
-const test1 = () => {
-  const f = call_fresh(q => equiv(q, 5));
-  const res = f(empty_state());
-  res.forEach(v => console.log(v.toString()));
-};

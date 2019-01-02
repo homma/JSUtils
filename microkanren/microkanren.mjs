@@ -1,4 +1,4 @@
-//// Debugging Utilities
+////// Debugging Utilities
 
 // if /System/Library/Frameworks/JavaScriptCore.framework/Resources/jsc
 // let console = { log: print };
@@ -11,9 +11,15 @@ if (enable_debug) {
   nebug = debug;
 }
 
-//// Data Structures
+////// Data Structures
+// - logical variable : Var
+// - substitution : Substitution
+// - substitution list : [Substitution]
+// - state : State
+// - stream : [State]
 
-// Var : logical variable
+//// Var : logical variable
+export //
 function Var(val) {
   this.val = val;
 }
@@ -26,9 +32,10 @@ const is_var = v => v instanceof Var;
 
 const is_equal = (v1, v2) => v1.val == v2.val;
 
-// Substitution
+//// Substitution
 // fst : Var or value
 // snd : Var or value
+export //
 function Substitution(fst, snd) {
   this.fst = fst;
   this.snd = snd;
@@ -48,9 +55,24 @@ Substitution.prototype.toString = function() {
   return `Substitution { fst: ${fst_data}, snd: ${snd_data} }`;
 };
 
-// State : a pair of a substitution list and a counter
+//// Substitution List
+// we use Array for the substitution list
+
+// extends substitution list
+// v : Var
+// val : value
+// slist : substitution list
+const extend_slist = (v, val, slist) => {
+  let ret = Array.from(slist);
+  ret.push(new Substitution(v, val));
+
+  return ret;
+};
+
+//// State : a pair of a substitution list and a counter
 // slist : a substitution list
 // counter : integer
+export //
 function State(slist, counter) {
   this.slist = slist;
   this.cntr = counter;
@@ -69,13 +91,30 @@ State.prototype.toString = function() {
 
 const empty_state = () => new State([], 0);
 
-// Stream : a sequence of State
+//// Stream : a sequence of State
 // we use Array for the stream
+
+// stream_from : unit ; make stream
+const stream_from = state => [state];
+
+// empty_stream : mzero ; empty stream
+export //
+const empty_stream = () => [];
 
 const print_stream = strm => strm.forEach(v => console.log(v.toString()));
 
-//// walk
+////// Functions
+// - walk
+// - unify
+// - equiv
+// - call_fresh
+// - disj
+// - conj
+// - merge_stream
+// - bind
 
+// walk
+export //
 const walk = (term, slist) => {
   nebug("== walk ==");
   nebug(`term: ${term}`);
@@ -96,23 +135,6 @@ const walk = (term, slist) => {
   }
 };
 
-// extends substitution list
-// v : Var
-// val : value
-// slist : substitution list
-const extend_slist = (v, val, slist) => {
-  let ret = Array.from(slist);
-  ret.push(new Substitution(v, val));
-
-  return ret;
-};
-
-// stream_from : unit ; make stream
-const stream_from = state => [state];
-
-// empty_stream : mzero ; empty stream
-const empty_stream = () => [];
-
 //// unification
 
 // unify : do unification
@@ -120,6 +142,7 @@ const empty_stream = () => [];
 // term2 : Var or value
 // slist : a substitution list
 // returns : a substitution list or false
+export //
 const unify = (term1, term2, slist) => {
   const u = walk(term1, slist);
   const v = walk(term2, slist);
@@ -157,10 +180,15 @@ const unify = (term1, term2, slist) => {
 };
 
 //// goal constructors
+// - equiv
+// - call_fresh
+// - disj
+// - conj
 
 // equiv : equivalent
 // original : ==
 // state : State
+export //
 const equiv = (term1, term2) => state => {
   nebug("== equiv ==");
   nebug(`term1 : ${term1}`);
@@ -178,6 +206,9 @@ const equiv = (term1, term2) => state => {
   }
 };
 
+// call_fresh
+// original : call/fresh
+export //
 const call_fresh = fun => state => {
   nebug("== call_fresh ==");
   nebug(`fun : ${fun}`);
@@ -195,13 +226,17 @@ const call_fresh = fun => state => {
 };
 
 // disjunction
-// g1 : goal1
-// g2 : goal2
+// g1 : goal function 1
+// g2 : goal function 2
+// state : State
+export //
 const disj = (g1, g2) => state => merge_stream(g1(state), g2(state));
 
 // conjunction
-// g1 : goal1
-// g2 : goal2
+// g1 : goal function 1
+// g2 : goal function 2
+// state : State
+export //
 const conj = (g1, g2) => state => bind(g1(state), g2);
 
 // merge_stream : merge two streams
@@ -209,6 +244,7 @@ const conj = (g1, g2) => state => bind(g1(state), g2);
 // strm1 : first stream
 // strm2 : second stream
 // returns : a merged stream
+export //
 const merge_stream = (strm1, strm2) => {
   nebug(`== merge_stream ==`);
   nebug(`strm1 : ${strm1}`);
@@ -235,6 +271,11 @@ const merge_stream = (strm1, strm2) => {
   return result;
 };
 
+// bind
+// strm : stream
+// goal : goal function
+// returns : a function or a stream
+export //
 const bind = (strm, goal) => {
   nebug("== bind ==");
   nebug(`strm : ${strm}`);
