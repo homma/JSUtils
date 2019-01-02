@@ -1,5 +1,8 @@
 //// Debugging Utilities
 
+// if /System/Library/Frameworks/JavaScriptCore.framework/Resources/jsc
+// let console = { log: print };
+
 let nebug = () => {};
 let debug = console.log;
 let enable_debug = 0;
@@ -64,15 +67,19 @@ State.prototype.toString = function() {
   return `State { slist : [ ${slist_data} ], cntr : ${this.cntr} }`;
 };
 
+const empty_state = () => new State([], 0);
+
 // Stream : a sequence of State
 // we use Array for the stream
+
+const print_stream = strm => strm.forEach(v => console.log(v.toString()));
 
 //// walk
 
 const walk = (term, slist) => {
-  nebug("== walk ==");
-  nebug(`term: ${term}`);
-  nebug(`subst: ${slist}`);
+  debug("== walk ==");
+  debug(`term: ${term}`);
+  debug(`subst: ${slist}`);
 
   let predicates = null;
 
@@ -80,7 +87,7 @@ const walk = (term, slist) => {
     predicates = slist.filter(subst => is_equal(term, subst.fst));
   }
 
-  nebug(`predicates: ${predicates}`);
+  debug(`predicates: ${predicates}`);
 
   if (predicates && predicates.length !== 0) {
     return walk(predicates[0].snd, slist);
@@ -118,22 +125,22 @@ const unify = (term1, term2, slist) => {
   const v = walk(term2, slist);
 
   if (is_var(u) && is_var(v) && is_equal(u, v)) {
-    nebug("var u and var v and equal");
+    debug("var u and var v and equal");
     return slist;
   }
 
   if (is_var(u)) {
-    nebug("var u and val v");
+    debug("var u and val v");
     return extend_slist(u, v, slist);
   }
 
   if (is_var(v)) {
-    nebug("var v and val u");
+    debug("var v and val u");
     return extend_slist(v, u, slist);
   }
 
   if (u instanceof Substitution && v instanceof Substitution) {
-    nebug("subst u and subst v");
+    debug("subst u and subst v");
     const s = unify(u.fst, v.fst, slist);
     if (s) {
       return unify(u.snd, v.snd, slist);
@@ -151,9 +158,15 @@ const unify = (term1, term2, slist) => {
 
 //// goal constructors
 
-// equivalent : ==
+// equiv : equivalent
+// original : ==
 // state : State
-const equivalent = (term1, term2) => state => {
+const equiv = (term1, term2) => state => {
+  debug("== equiv ==");
+  debug(`term1 : ${term1}`);
+  debug(`term2 : ${term2}`);
+  debug(`state : ${state.toString()}`);
+
   const slist = unify(term1, term2, state.slist);
 
   if (slist) {
@@ -166,18 +179,33 @@ const equivalent = (term1, term2) => state => {
 };
 
 const call_fresh = fun => state => {
+  debug("== call_fresh ==");
+  debug(`fun : ${fun}`);
+  debug(`state : ${state.toString()}`);
+  debug(`state : ${state}`);
+
+  debug(`state.cntr : ${state.cntr}`);
   let cnt = state.cntr;
+  debug(`cnt : ${cnt}`);
+
   const f = fun(new Var(cnt));
   cnt++;
+
+  debug(`f : ${f}`);
+  debug(`state.slist : ${state.slist}`);
+
   return f(new State(state.slist, cnt));
 };
 
 // disjunction
-const disj = (goal1, goal2) => state =>
-  merge_stream(goal1(state), goal2(state));
+// g1 : goal1
+// g2 : goal2
+const disj = (g1, g2) => state => merge_stream(g1(state), g2(state));
 
 // conjunction
-const conj = (goal1, goal2) => state => bind(goal1(state), goal2);
+// g1 : goal1
+// g2 : goal2
+const conj = (g1, g2) => state => bind(g1(state), g2);
 
 // merge_stream : merge two streams
 // original : mplus
@@ -185,38 +213,114 @@ const conj = (goal1, goal2) => state => bind(goal1(state), goal2);
 // strm2 : second stream
 // returns : a merged stream
 const merge_stream = (strm1, strm2) => {
+  debug(`== merge_stream ==`);
+  debug(`strm1 : ${strm1}`);
+  debug(`strm2 : ${strm2}`);
+
   if (strm1.length === 0) {
+    debug("= strm1.length === 0");
     return strm2;
   }
 
-  // strm1[0]?
   if (strm1 instanceof Function) {
+    debug("= strm1 instanceof Function");
     return () => merge_stream(strm2, strm1());
   }
 
-  strm1.slice(0, 1).push(merge_stream(strm1(1), strm2));
-  return strm1;
+  debug("= other");
+  debug(`strm1.slice(0, 1) : ${strm1.slice(0, 1)}`);
+  debug(`strm1.slice(1) : ${strm1.slice(1)}`);
+
+  let result = strm1.slice(0, 1);
+  result.push(merge_stream(strm1.slice(1), strm2));
+
+  debug(`result : ${result}`);
+  return result;
 };
 
 const bind = (strm, goal) => {
+  debug("== bind ==");
+  debug(`strm : ${strm}`);
+  debug(`goal : ${goal}`);
+
   if (strm.length === 0) {
+    debug("= strm.length === 0");
     return empty_stream();
   }
 
   if (strm instanceof Function) {
+    debug("= strm instanceof Function");
     return () => bind(strm(), goal);
   }
 
-  return merge_stream(goal(strm.slice(0, 1)), bind(strm.slice(1), goal));
+  debug("= other");
+  debug(`strm.slice(0, 1) : ${strm.slice(0, 1)}`);
+  debug(`strm.slice(1) : ${strm.slice(1)}`);
+
+  debug("= g1");
+  const g1 = goal(strm.slice(0, 1));
+  debug(`g1 : ${g1})`);
+
+  debug("= g2");
+  const g2 = bind(strm.slice(1), goal);
+  debug(`g2 : ${g2})`);
+
+  return merge_stream(g1, g2);
 };
+
+//// Samples
+
+const sample1 = () => {
+  console.log("== sample 1 ==");
+  const res = call_fresh(q => equiv(q, 5))(empty_state());
+  print_stream(res);
+};
+
+// sample1();
+
+const sample2 = () => {
+  console.log("== sample 2 : a-and-b ==");
+  const a_and_b = conj(
+    call_fresh(a => equiv(a, 7)),
+    call_fresh(b => disj(equiv(b, 5), equiv(b, 6)))
+  );
+  const res = a_and_b(empty_state());
+  console.log(res);
+  // print_stream(res);
+};
+
+// sample2();
 
 //// Test
 
 const test1 = () => {
-  const empty_state = new State([], 0);
-  const f = call_fresh(q => equivalent(q, 5));
-  const res = f(empty_state);
+  const f = call_fresh(q => equiv(q, 5));
+  const res = f(empty_state());
   res.forEach(v => console.log(v.toString()));
 };
 
-test1();
+// test1();
+
+const disj_test = () => {
+  console.log("== disj test ==");
+
+  const g1 = call_fresh(a => equiv(a, 7));
+  const g2 = call_fresh(b => equiv(b, 8));
+  const res = disj(g1, g2)(empty_state());
+  // console.log(res);
+  print_stream(res);
+};
+
+// disj_test();
+
+const conj_test = () => {
+  console.log("== conj test ==");
+
+  const g1 = call_fresh(a => equiv(a, 7));
+  const g2 = call_fresh(b => equiv(b, 8));
+  const res = conj(g1, g2)(empty_state());
+  // console.log(res);
+  print_stream(res);
+};
+
+conj_test();
