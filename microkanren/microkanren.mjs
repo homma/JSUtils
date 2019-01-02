@@ -94,13 +94,16 @@ const empty_state = () => new State([], 0);
 //// Stream : a sequence of State
 // we use Array for the stream
 
-// stream_from : unit ; make stream
+// stream_from : make a stream from a state
+// original : unit
 const stream_from = state => [state];
 
-// empty_stream : mzero ; empty stream
+// empty_stream : make an empty stream
+// original : mzero
 export //
 const empty_stream = () => [];
 
+// print contents of a stream
 const print_stream = strm => strm.forEach(v => console.log(v.toString()));
 
 ////// Functions
