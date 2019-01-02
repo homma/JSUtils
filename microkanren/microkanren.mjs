@@ -3,7 +3,9 @@
 // if /System/Library/Frameworks/JavaScriptCore.framework/Resources/jsc
 // let console = { log: print };
 
+// no debug
 let nebug = () => {};
+
 let debug = console.log;
 let enable_debug = 0;
 
@@ -295,7 +297,7 @@ const bind = (strm, goal) => {
   }
 
   nebug("= other");
-  nebug(`strm.slice[0] : ${strm.slice[0]}`);
+  nebug(`strm[0] : ${strm[0]}`);
   nebug(`strm.slice(1) : ${strm.slice(1)}`);
 
   // pick one and apply the goal to it.
