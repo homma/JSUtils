@@ -362,7 +362,7 @@ const take_all = strm => {
     return [];
   }
 
-  let ret = [s];
+  let ret = res.slice(0, 1);
   ret.concat(take_all(strm.slice(1)));
 
   return ret;
