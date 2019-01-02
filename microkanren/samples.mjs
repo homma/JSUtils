@@ -43,7 +43,6 @@ const sample4 = () => {
 // sample4();
 
 const sample5 = () => {
-  // stack exhaustion as well?
   console.log("== sample 5 : fives-and-sixes ==");
 
   const fives = x => disj(equiv(x, 5), state => () => fives(x)(state));
