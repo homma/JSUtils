@@ -91,10 +91,32 @@ State.prototype.toString = function() {
   return `State { slist : [ ${slist_data} ], cntr : ${this.cntr} }`;
 };
 
+export //
 const empty_state = () => new State([], 0);
 
 //// Stream : a sequence of State
-// we use Array for the stream
+//
+// the original implementation in scheme uses cons cells for a stream
+// for mature stream : (state . (state . (state . empty-stream))))
+// for immature stream : (state . (state . (state . procedure)))
+//
+// instead, we use Array for the stream
+// for mature stream : [state, state, state]
+// for immature stream : [state, state, fun]
+
+// is_fun : check if it is the last element of an immature stream
+// strm : a stream
+export //
+const is_fun = strm => strm.length == 1 && strm[0] instanceof Function;
+
+export //
+const get_fun = strm => {
+  if (!is_fun(strm)) {
+    console.log(`ERROR: ${strm} is not the last element of a immature stream.`);
+  }
+
+  return strm[0];
+};
 
 // stream_from : make a stream from a state
 // original : unit
@@ -106,7 +128,9 @@ export //
 const empty_stream = () => [];
 
 // print contents of a stream
-const print_stream = strm => strm.forEach(v => console.log(v.toString()));
+export //
+const print_stream = strm =>
+  strm.forEach(state => console.log(state.toString()));
 
 ////// Functions
 // - walk
@@ -260,9 +284,9 @@ const merge_stream = (strm1, strm2) => {
     return strm2;
   }
 
-  if (strm1 instanceof Function) {
-    nebug("= strm1 instanceof Function");
-    return () => merge_stream(strm2, strm1());
+  if (is_fun(strm1)) {
+    nebug("= strm1[0] instanceof Function");
+    return () => merge_stream(strm2, get_fun(strm1)());
   }
 
   nebug("= other");
@@ -270,7 +294,7 @@ const merge_stream = (strm1, strm2) => {
   nebug(`strm1.slice(1) : ${strm1.slice(1)}`);
 
   let result = strm1.slice(0, 1);
-  result.push(merge_stream(strm1.slice(1), strm2));
+  result = result.concat(merge_stream(strm1.slice(1), strm2));
 
   nebug(`result : ${result}`);
   return result;
@@ -291,9 +315,9 @@ const bind = (strm, goal) => {
     return empty_stream();
   }
 
-  if (strm instanceof Function) {
-    nebug("= strm instanceof Function");
-    return () => bind(strm(), goal);
+  if (is_fun(strm)) {
+    nebug("= strm[0] instanceof Function");
+    return () => bind(get_fun(strm)(), goal);
   }
 
   nebug("= other");
@@ -311,4 +335,59 @@ const bind = (strm, goal) => {
   nebug(`g2 : ${g2})`);
 
   return merge_stream(g1, g2);
+};
+
+//// Sugar
+
+// pull
+export //
+const pull = strm => {
+  if (is_fun(strm)) {
+    nebug("strm[0] instanceof Function");
+    return pull(get_fun(strm)());
+  } else {
+    return strm;
+  }
+};
+
+// take_all
+// original : take-all
+export //
+const take_all = strm => {
+  const res = pull(strm);
+
+  if (strm.length === 0) {
+    return [];
+  }
+
+  let ret = [s];
+  ret.concat(take_all(strm.slice(1)));
+
+  return ret;
+};
+
+// take
+export //
+const take = (n, strm) => {
+  nebug("== take ==");
+
+  if (n === 0) {
+    return [];
+  }
+
+  const res = pull(strm);
+  nebug(`res : ${res}`);
+  nebug(`typeof res : ${typeof res}`);
+  nebug(`res : ${Array.isArray(res)}`);
+
+  if (res.length === 0) {
+    return [];
+  }
+
+  let ret = res.slice(0, 1);
+  ret = ret.concat(take(n - 1, res.slice(1)));
+
+  nebug(`ret : ${ret}`);
+
+  return ret;
 };
