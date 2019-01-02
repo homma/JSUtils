@@ -300,13 +300,11 @@ const bind = (strm, goal) => {
 
   // pick one and apply the goal to it.
   nebug("= g1");
-
   const g1 = goal(strm[0]);
   nebug(`g1 : ${g1})`);
 
   // bind rest.
   nebug("= g2");
-
   const g2 = bind(strm.slice(1), goal);
   nebug(`g2 : ${g2})`);
 
