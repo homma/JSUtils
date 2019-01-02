@@ -109,3 +109,17 @@ const test1 = () => {
 };
 
 // test1();
+
+// disj_test();
+
+const conj_test = () => {
+  console.log("== conj test ==");
+
+  const g1 = call_fresh(a => equiv(a, 7));
+  const g2 = call_fresh(b => equiv(b, 8));
+  const res = conj(g1, g2)(empty_state());
+  // console.log(res);
+  print_stream(res);
+};
+
+// conj_test();
