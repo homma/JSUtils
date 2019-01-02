@@ -40,7 +40,7 @@ const sample4 = () => {
   print_stream(res);
 };
 
-sample4();
+// sample4();
 
 const sample5 = () => {
   // stack exhaustion as well?
