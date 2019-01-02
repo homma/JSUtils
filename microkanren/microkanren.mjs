@@ -112,7 +112,9 @@ const is_fun = strm => strm.length == 1 && strm[0] instanceof Function;
 export //
 const get_fun = strm => {
   if (!is_fun(strm)) {
-    console.log(`ERROR: ${strm} is not the last element of a immature stream.`);
+    console.log(
+      `ERROR: ${strm} is not the last element of an immature stream.`
+    );
   }
 
   return strm[0];
