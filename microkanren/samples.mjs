@@ -71,12 +71,12 @@ const sample4a = () => {
 const sample4b = () => {
   console.log("== sample 4b : fives with delay ==");
 
-  // const fives = x => lazy_disj([equiv(x, 5), fives(x)]);
+  const fives = x => lazy_disj(() => [equiv(x, 5), () => fives(x)]);
 
   const res = call_fresh(fives)(empty_state());
   // const ret5 = take(5, res);
 
-  print_stream(ret);
+  print_stream(res);
 };
 
 sample4b();

@@ -345,16 +345,19 @@ const bind = (strm, goal) => {
 };
 
 ////// Utility Functions
+// under development
 
-// this does not work
-// we need to create a thunk without a macro
+//// Lazy evaluation
+// the original implementation uses macros to delay execution of goal functions
+// instead, we need to use thunk
 
 // delay
 // original : Zzz
-// goal : a goal function
+// thunk : a function which returns a goal function
+//         thunk : () => goal
 // state : a state
 export //
-const delay = goal => state => () => goal(state);
+const delay = thunk => state => () => thunk()(state);
 
 // lazy_conj
 // original : conj+
