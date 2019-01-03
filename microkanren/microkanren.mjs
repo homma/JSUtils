@@ -3,7 +3,7 @@
 // if /System/Library/Frameworks/JavaScriptCore.framework/Resources/jsc
 // let console = { log: print };
 
-// no debug
+// no debug, do nothing. just a placeholder
 let nebug = () => {};
 
 let debug = console.log;
@@ -339,7 +339,41 @@ const bind = (strm, goal) => {
   return merge_stream(g1, g2);
 };
 
-//// Sugar
+////// Utility Functions
+
+// this does not work
+// we need to create a thunk without a macro
+
+// delay
+// original : Zzz
+// goal : a goal function
+// state : a state
+export //
+const delay = goal => state => () => goal(state);
+
+// lazy_conj
+// original : conj+
+// goals : list of goals
+export //
+const lazy_conj = goals => {
+  if (goals.length === 1) {
+    return delay(goals[0]);
+  }
+
+  return conj(delay(goals[0]), lazy_conj(goals.slice(1)));
+};
+
+// lazy_disj
+// original : disj+
+// goals : list of goals
+export //
+const lazy_disj = goals => {
+  if (goals.length === 1) {
+    return delay(goals[0]);
+  }
+
+  return disj(delay(goals[0]), lazy_disj(goals.slice(1)));
+};
 
 // pull
 export //

@@ -7,7 +7,10 @@ import {
   print_stream,
   disj,
   conj,
-  take
+  take,
+  delay,
+  lazy_conj,
+  lazy_disj
 } from "./microkanren.mjs";
 
 const sample1 = () => {
@@ -64,6 +67,19 @@ const sample4a = () => {
 };
 
 // sample4a();
+
+const sample4b = () => {
+  console.log("== sample 4b : fives with delay ==");
+
+  // const fives = x => lazy_disj([equiv(x, 5), fives(x)]);
+
+  const res = call_fresh(fives)(empty_state());
+  // const ret5 = take(5, res);
+
+  print_stream(ret);
+};
+
+sample4b();
 
 const sample5 = () => {
   console.log("== sample 5 : fives-and-sixes ==");
