@@ -39,7 +39,7 @@ const is_var = v => v instanceof Var;
 const is_equal = (v1, v2) => v1.val == v2.val;
 
 //// Substitution
-// Substitution is a pair which points logic variable or int value
+// Substitution is a pair which points to logic variable or int value
 // fst : Var or int
 // snd : Var or int
 export //
