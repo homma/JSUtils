@@ -1,3 +1,7 @@
+//
+// a port of microKanren to JavaScript
+//
+
 ////// Debugging Utilities
 
 // if /System/Library/Frameworks/JavaScriptCore.framework/Resources/jsc
