@@ -94,3 +94,22 @@ const sample5 = () => {
 };
 
 // sample5();
+
+const sample6 = () => {
+  // from https://github.com/shd101wyy/logic.js/blob/master/docs/logic.js.md
+
+  const parent = (x, y) =>
+    disj(
+      conj(equiv(x, "amy"), equiv(y, "bob")),
+      conj(equiv(x, "bob"), equiv(y, "marco"))
+    );
+
+  const grandparent = (x, z) => {
+    return call_fresh(v => conj(parent(x, v), parent(v, z)));
+  };
+
+  print_stream(call_fresh(() => grandparent("amy", "marco"))(empty_state()));
+  print_stream(call_fresh(x => grandparent(x, "marco"))(empty_state()));
+};
+
+// sample6();
