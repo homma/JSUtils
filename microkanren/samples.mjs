@@ -1,6 +1,7 @@
 //// Sample programs
 
 import {
+  debug,
   equiv,
   call_fresh,
   empty_state,
@@ -71,15 +72,32 @@ const sample4a = () => {
 const sample4b = () => {
   console.log("== sample 4b : fives with delay ==");
 
-  const fives = x => lazy_disj(() => [equiv(x, 5), () => fives(x)]);
+  const fives = x => disj(equiv(x, 5), delay(() => fives(x)));
 
   const res = call_fresh(fives)(empty_state());
-  // const ret5 = take(5, res);
+  const ret5 = take(5, res);
 
-  print_stream(res);
+  print_stream(ret5);
 };
 
-sample4b();
+// sample4b();
+
+const sample4c = () => {
+  console.log("== sample 4c : fives with delay ==");
+
+  const fives = x => lazy_disj(() => equiv(x, 5), () => fives(x));
+
+  const res = call_fresh(fives)(empty_state());
+  // console.log(`res : ${res}`);
+  // console.log(`res() : ${res()}`);
+
+  const ret5 = take(5, res);
+
+  console.log(ret5);
+  // print_stream(res);
+};
+
+sample4c();
 
 const sample5 = () => {
   console.log("== sample 5 : fives-and-sixes ==");

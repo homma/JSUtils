@@ -8,11 +8,13 @@
 // let console = { log: print };
 
 // no debug, do nothing. just a placeholder
+export //
 let nebug = () => {};
 
+export //
 let debug = console.log;
-let enable_debug = 0;
 
+let enable_debug = 0;
 if (enable_debug) {
   nebug = debug;
 }
@@ -246,17 +248,17 @@ const equiv = (term1, term2) => state => {
 // original : call/fresh
 export //
 const call_fresh = fun => state => {
-  nebug("== call_fresh ==");
-  nebug(`fun : ${fun}`);
-  nebug(`state : ${state.toString()}`);
+  debug("== call_fresh ==");
+  debug(`fun : ${fun}`);
+  debug(`state : ${state.toString()}`);
 
   let cnt = state.cntr;
 
   const f = fun(new Var(cnt));
   cnt++;
 
-  nebug(`f : ${f}`);
-  nebug(`state.slist : ${state.slist}`);
+  debug(`f : ${f}`);
+  debug(`state.slist : ${state.slist}`);
 
   return f(new State(state.slist, cnt));
 };
@@ -345,7 +347,6 @@ const bind = (strm, goal) => {
 };
 
 ////// Utility Functions
-// under development
 
 //// Lazy evaluation
 // the original implementation uses macros to delay execution of goal functions
@@ -359,28 +360,39 @@ const bind = (strm, goal) => {
 export //
 const delay = thunk => state => () => thunk()(state);
 
+// under development
 // lazy_conj
 // original : conj+
-// goals : list of goals
+// goals : multiple goals
 export //
-const lazy_conj = goals => {
+const lazy_conj = (...goals) => {
   if (goals.length === 1) {
     return delay(goals[0]);
   }
 
-  return conj(delay(goals[0]), lazy_conj(goals.slice(1)));
+  return conj(delay(goals[0]), lazy_conj(...goals.slice(1)));
 };
 
+// under development
 // lazy_disj
 // original : disj+
-// goals : list of goals
+// goals : multiple goals
 export //
-const lazy_disj = goals => {
+const lazy_disj = (...goals) => {
+  debug("== lazy_disj ==");
+  debug(`goals : ${goals}`);
+  debug(`goals.length : ${goals.length}`);
+  debug(`goals[0] : ${goals[0]}`);
+
   if (goals.length === 1) {
+    debug("= goals.length === 1");
     return delay(goals[0]);
   }
 
-  return disj(delay(goals[0]), lazy_disj(goals.slice(1)));
+  const ret = disj(delay(goals[0]), lazy_disj(...goals.slice(1)));
+  debug(`ret : ${ret}`);
+
+  return ret;
 };
 
 // pull
